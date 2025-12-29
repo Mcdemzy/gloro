@@ -28,7 +28,7 @@
 import React from "react";
 
 const page = () => {
-  return <div className="bg-cyan-600 flex justify-center items-center h-screen text-7xl text-center font-bold uppercase text-white">Gloro Landing Page</div>;
+  return <div className="bg-cyan-600 flex justify-center items-center h-screen text-7xl text-center font-bold uppercase text-white orbitron">Gloro Landing Page</div>;
 };
 
 export default page;
