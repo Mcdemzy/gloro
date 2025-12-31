@@ -1,50 +1,38 @@
-import LoginBG from "@/assets/images/loginBG.png";
-import LoginMan from "@/assets/images/loginMan.png";
-import { LogIn, UserRoundPlus } from "lucide-react";
+import React from "react";
+import loginBG from "@/assets/images/loginBG.png";
+import loginMan from "@/assets/images/loginMan.png";
+import Image from "next/image";
 
 const LoginPage = () => {
   return (
-    <main
-      className="w-full min-h-screen px-26 py-8 bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: `url(${LoginBG.src})`,
-      }}
-    >
-      <article className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Section */}
-        <section
-          className="h-full min-h-screen bg-contain bg-left bg-no-repeat"
-          style={{
-            backgroundImage: `url(${LoginMan.src})`,
-          }}
-        >
-          <h1>Gloro</h1>
-          <h2>Welcome to Gloro Gaming platform</h2>
-
-          <p>
-            This is where you can sign in and sign up, to get more information
-            and participate in upcoming Tournament{" "}
-          </p>
-        </section>
-
-        {/* Right Section */}
-        <section>
-          {/* Login & Signup Toggler section */}
-          <div>
-            <div>
-              <button>
-                <LogIn />
-                Login
-              </button>
-              <button>
-                <UserRoundPlus />
-                Sign up
-              </button>
-            </div>
+    <>
+    {/* The Login BG is the BG that covers the entire page, with this color too sha #020818 */}
+      <main className="bg-[#020818] min-h-screen w-full px-[104px] py-8">
+        {/* Main Login View */}
+        <section className="bg-purple-600 w-full min-h-[400px] flex flex-col md:flex-row">
+          {/* Left Hand Side Image */}
+          <div className="max-w-[600px]">
+            <Image src={loginMan} alt="Login Illustration" />
           </div>
+
+          {/* Right Hand Side Login Form */}
+          <section className="w-fit">
+            <div className="mx-auto flex justify-center items-center bg-white rounded-2xl p-2">
+              <button>Login</button>
+              <button>Signup</button>
+            </div>
+            <p>Welcome Back</p>
+
+            <form action="">
+              <div>
+                <label htmlFor="">Email or Username</label>
+                <input type="text" placeholder="Enter your email or username" />
+              </div>
+            </form>
+          </section>
         </section>
-      </article>
-    </main>
+      </main>
+    </>
   );
 };
 
