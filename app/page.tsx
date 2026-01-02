@@ -24,7 +24,7 @@ const page = () => {
       <main
         className="w-full min-h-screen text-white bg-[#020818] bg-cover bg-center bg-no-repeat"
         style={{
-          // backgroundImage: `url(${HeroBG.src})`,
+          backgroundImage: `url(${HeroBG.src})`,
         }}
       >
         page
