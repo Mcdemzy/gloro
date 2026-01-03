@@ -20,6 +20,7 @@ import HeroBG from "@/assets/images/HeroBG.png";
 import HeroSection from "@/components/landing/HeroSection";
 import LatestCompetitions from "@/components/landing/LatestCompetitions";
 import Trending from "@/components/landing/Trending";
+import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
 
 const page = () => {
@@ -35,6 +36,7 @@ const page = () => {
         <HeroSection />
         <Trending/>
         <LatestCompetitions/>
+        <Footer/>
       </main>
     </>
   );
