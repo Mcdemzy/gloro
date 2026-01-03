@@ -93,12 +93,6 @@ const Navbar = () => {
           </svg>
         </button>
       </nav>
-
-      {/* Demo Content Below */}
-      <div className="mt-32 text-center">
-        <h2 className="text-4xl font-bold text-white mb-4">Welcome to Gloro</h2>
-        <p className="text-gray-400">Your gaming tournament platform</p>
-      </div>
     </div>
   );
 };

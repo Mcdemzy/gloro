@@ -17,6 +17,10 @@
 // export default page;
 
 import HeroBG from "@/assets/images/HeroBG.png";
+import HeroSection from "@/components/landing/HeroSection";
+import LatestCompetitions from "@/components/landing/LatestCompetitions";
+import Trending from "@/components/landing/Trending";
+import Navbar from "@/components/shared/Navbar";
 
 const page = () => {
   return (
@@ -27,7 +31,10 @@ const page = () => {
           backgroundImage: `url(${HeroBG.src})`,
         }}
       >
-        page
+        <Navbar/>
+        <HeroSection />
+        <Trending/>
+        <LatestCompetitions/>
       </main>
     </>
   );
