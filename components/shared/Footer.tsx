@@ -36,7 +36,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
           {/* Left - Logo and Contact */}
           <div className="space-y-8">
-            <h1 className="text-cyan-400 text-5xl font-bold">Gloro</h1>
+            <h1 className="text-cyan-400 text-5xl font-bold orbitron">Gloro</h1>
 
             <div className="space-y-4">
               <div className="flex items-start gap-3 text-gray-300">

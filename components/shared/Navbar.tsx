@@ -16,7 +16,7 @@ const Navbar = () => {
       >
         {/* Logo */}
         <div className="shrink-0">
-          <h1 className="text-2xl md:text-3xl font-bold bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-3xl font-bold bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent orbitron">
             Gloro
           </h1>
         </div>
