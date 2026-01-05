@@ -13,7 +13,7 @@ const HeroSection = () => {
 
       {/* Main content */}
       <div className="relative z-10">
-        <h1 className="font-bold text-5xl md:text-7xl lg:text-8xl leading-tight tracking-wide">
+        <h1 className="font-bold text-5xl md:text-7xl lg:text-8xl leading-tight tracking-wide mt-40 orbitron">
           THE ULTIMATE <br />
           <span className="bg-gradient-to-r from-purple-500 via-purple-600 to-cyan-500 bg-clip-text text-transparent font-extrabold text-6xl md:text-8xl lg:text-9xl">
             GAMING {" "}
