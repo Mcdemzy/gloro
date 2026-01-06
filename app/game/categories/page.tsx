@@ -1,46 +1,64 @@
 import React from "react";
-import { Home, Trophy, Gamepad2, Users, Settings, ChevronDown } from "lucide-react";
+import {
+  Home,
+  Trophy,
+  Gamepad2,
+  Users,
+  Settings,
+  ChevronDown,
+} from "lucide-react";
+import Link from "next/link";
 
 const GameCategoriesPage = () => {
   const sidebarItems = [
-    { icon: Home, label: "Home", href: "#" },
-    { icon: Trophy, label: "Tournaments", href: "#" },
-    { icon: Gamepad2, label: "Games", href: "#", active: true },
+    { icon: Home, label: "Home", href: "/" },
+    { icon: Trophy, label: "Tournaments", href: "/tournaments" },
+    { icon: Gamepad2, label: "Games", href: "/game/categories", active: true },
     { icon: Users, label: "Community", href: "#" },
-    { icon: Settings, label: "Settings", href: "#" }
+    { icon: Settings, label: "Settings", href: "#" },
   ];
 
   const games = [
     {
       id: 1,
+      slug: "fifa-mobile",
       title: "FIFA Mobile",
-      image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&h=600&fit=crop",
-      tournaments: 24
+      image:
+        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&h=600&fit=crop",
+      tournaments: 24,
     },
     {
       id: 2,
+      slug: "call-of-duty-mobile",
       title: "Call Of Duty - Mobile",
-      image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
-      tournaments: 18
+      image:
+        "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
+      tournaments: 18,
     },
     {
       id: 3,
+      slug: "free-fire",
       title: "Free Fire",
-      image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&h=600&fit=crop",
-      tournaments: 32
+      image:
+        "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&h=600&fit=crop",
+      tournaments: 32,
     },
     {
       id: 4,
+      slug: "dream-league",
       title: "Dream League",
-      image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop",
-      tournaments: 15
+      image:
+        "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop",
+      tournaments: 15,
     },
     {
       id: 5,
+      slug: "god-of-guns",
       title: "God of Guns - The Crossfade & Diners",
-      image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
-      tournaments: 12
-    }
+      image:
+        "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
+      tournaments: 12,
+    },
   ];
 
   return (
@@ -49,12 +67,12 @@ const GameCategoriesPage = () => {
       <aside className="fixed left-0 top-0 h-screen w-20 bg-[#1a1d2e]/80 backdrop-blur-md border-r border-purple-500/20 flex flex-col items-center py-8 z-50">
         {/* Decorative line */}
         <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-purple-500 to-transparent"></div>
-        
+
         <div className="space-y-6">
           {sidebarItems.map((item, index) => {
             const Icon = item.icon;
             return (
-              <a
+              <Link
                 key={index}
                 href={item.href}
                 className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group relative ${
@@ -68,7 +86,7 @@ const GameCategoriesPage = () => {
                 <span className="absolute left-full ml-4 px-3 py-2 bg-[#1a1d2e] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap border border-purple-500/20">
                   {item.label}
                 </span>
-              </a>
+              </Link>
             );
           })}
         </div>
@@ -79,9 +97,12 @@ const GameCategoriesPage = () => {
         <div className="max-w-7xl mx-auto px-8 py-12">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-white mb-4 orbitron">Game Categories</h1>
+            <h1 className="text-5xl font-bold text-white mb-4 orbitron">
+              Game Categories
+            </h1>
             <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-              Explore all ongoing, upcoming and past gaming Tournaments. Join, watch or follow your favorite games.
+              Explore all ongoing, upcoming and past gaming Tournaments. Join,
+              watch or follow your favorite games.
             </p>
           </div>
 
@@ -98,7 +119,7 @@ const GameCategoriesPage = () => {
                 >
                   {/* Image */}
                   <div className="relative overflow-hidden h-64">
-                    <div 
+                    <div
                       className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                       style={{ backgroundImage: `url(${game.image})` }}
                     >
@@ -112,9 +133,12 @@ const GameCategoriesPage = () => {
                       {game.title}
                     </h3>
 
-                    <button className="w-full bg-transparent border border-green-400 text-green-400 hover:bg-green-400 hover:text-white font-semibold py-3 rounded-xl transition-all duration-300">
+                    <Link
+                      href={`/game/categories/${game.slug}`}
+                      className="w-full bg-transparent border border-green-400 text-green-400 hover:bg-green-400 hover:text-white font-semibold py-3 rounded-xl transition-all duration-300 flex items-center justify-center"
+                    >
                       See Tournaments
-                    </button>
+                    </Link>
                   </div>
                 </div>
               ))}
