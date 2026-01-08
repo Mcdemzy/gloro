@@ -111,11 +111,14 @@ const TournamentDetailPage = () => {
               Registration closes on December 18th, 2025
             </p>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Updated Register Now button */}
             <div className="flex gap-4 justify-center">
-              <button className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50">
+              <Link
+                href={`/tournaments/${tournamentId}/registration`}
+                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
+              >
                 Register Now
-              </button>
+              </Link>
               <button className="px-8 py-3 bg-transparent border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2">
                 <Download size={20} />
                 See Details
@@ -195,9 +198,12 @@ const TournamentDetailPage = () => {
                 ))}
               </div>
 
-              <button className="w-full mt-6 px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50">
+              <Link
+                href={`/tournaments/${tournamentId}/registration`}
+                className="w-full mt-6 px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50 flex items-center justify-center"
+              >
                 Register Now
-              </button>
+              </Link>
             </div>
 
             {/* Right Column - Schedules */}
