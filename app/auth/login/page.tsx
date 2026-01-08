@@ -1,4 +1,5 @@
-"use client";import React, { useState } from "react";
+"use client";
+import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
 const LoginPage = () => {
@@ -14,12 +15,17 @@ const LoginPage = () => {
         <div className="lg:w-1/2 relative bg-gradient-to-br from-purple-600 via-purple-700 to-blue-700 p-12 flex flex-col justify-between min-h-[500px]">
           {/* Background gaming image would go here */}
           <div className="absolute inset-0 bg-gradient-to-br from-pink-500/30 via-purple-600/50 to-blue-600/40"></div>
-          
+
           <div className="relative z-10">
-            <h1 className="orbitron text-cyan-400 text-5xl font-bold mb-8">Gloro</h1>
-            <h2 className="text-white text-4xl font-bold mb-4">Welcome to Gloro Gaming platform</h2>
+            <h1 className="orbitron text-cyan-400 text-5xl font-bold mb-8">
+              Gloro
+            </h1>
+            <h2 className="text-white text-4xl font-bold mb-4">
+              Welcome to Gloro Gaming platform
+            </h2>
             <p className="text-white/90 text-lg">
-              This is where you can sign in and sign up, to get more information and participate in upcoming Tournament
+              This is where you can sign in and sign up, to get more information
+              and participate in upcoming Tournament
             </p>
           </div>
 
@@ -57,14 +63,21 @@ const LoginPage = () => {
           </div>
 
           <div className="w-full max-w-md mx-auto flex-1">
-            <h3 className="text-white text-2xl font-bold mb-8 text-center">Welcome Back!</h3>
+            <h3 className="text-white text-2xl font-bold mb-8 text-center">
+              Welcome Back!
+            </h3>
 
             <form className="space-y-6">
               {/* Email/Username Input */}
               <div>
-                <label className="text-white/90 text-sm mb-2 block">Email or Username</label>
+                <label className="text-white/90 text-sm mb-2 block">
+                  Email or Username
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={20} />
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={20}
+                  />
                   <input
                     type="text"
                     placeholder="Enter your email or username"
@@ -75,9 +88,14 @@ const LoginPage = () => {
 
               {/* Password Input */}
               <div>
-                <label className="text-white/90 text-sm mb-2 block">Password</label>
+                <label className="text-white/90 text-sm mb-2 block">
+                  Password
+                </label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={20} />
+                  <Lock
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={20}
+                  />
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
@@ -102,9 +120,14 @@ const LoginPage = () => {
                     onChange={(e) => setKeepLoggedIn(e.target.checked)}
                     className="mr-2 w-4 h-4 accent-cyan-500"
                   />
-                  <span className="text-white/80 text-sm">Keep me logged in</span>
+                  <span className="text-white/80 text-sm">
+                    Keep me logged in
+                  </span>
                 </label>
-                <a href="#" className="text-white/80 hover:text-cyan-400 text-sm transition-colors">
+                <a
+                  href="#"
+                  className="text-white/80 hover:text-cyan-400 text-sm transition-colors"
+                >
                   Forgot your password?
                 </a>
               </div>
@@ -112,7 +135,10 @@ const LoginPage = () => {
               {/* Sign In Link */}
               <p className="text-white/70 text-sm text-center">
                 If you do not have an account, create an account by clicking{" "}
-                <a href="#" className="text-cyan-400 hover:text-cyan-300 font-semibold">
+                <a
+                  href="#"
+                  className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                >
                   Sign in
                 </a>
               </p>
