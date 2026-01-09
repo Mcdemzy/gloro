@@ -1,5 +1,5 @@
-import TeamsContent from "@/components/dashboard/TeamsContent";
+import TeamsListContent from "@/components/dashboard/TeamsListContent";
 
 export default function TeamsPage() {
-  return <TeamsContent />;
+  return <TeamsListContent />;
 }

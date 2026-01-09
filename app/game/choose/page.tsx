@@ -33,8 +33,8 @@ const games = [
 const ChooseGamesPage = () => {
   const [selectedGames, setSelectedGames] = useState([]);
 
-  const toggleGame = (game) => {
-    if (selectedGames.includes(game)) {
+  const toggleGame = (game:any) => {
+    if (selectedGames.includes(game:any)) {
       setSelectedGames(selectedGames.filter((g) => g !== game));
     } else {
       if (selectedGames.length < 3) {
@@ -43,7 +43,7 @@ const ChooseGamesPage = () => {
     }
   };
 
-  const isSelected = (game) => selectedGames.includes(game);
+  const isSelected = (game:any) => selectedGames.includes(game:any);
   const canSelect = selectedGames.length < 3;
 
   return (
