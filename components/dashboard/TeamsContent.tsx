@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Share2 } from "lucide-react";
+import Link from "next/link";
 
 const TeamsContent = () => {
   const [showShareModal, setShowShareModal] = useState(false);
@@ -126,9 +127,12 @@ const TeamsContent = () => {
       {/* Your Teams Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-white">Your Teams</h2>
-        <button className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50">
+        <Link
+          href="/dashboard/teams/create"
+          className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
+        >
           Create new team
-        </button>
+        </Link>
       </div>
 
       {/* Teams Grid */}

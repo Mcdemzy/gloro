@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Share2 } from "lucide-react";
+import Link from "next/link";
 
 const OverviewContent = () => {
   const [showShareModal, setShowShareModal] = useState(false);
@@ -133,7 +134,12 @@ const OverviewContent = () => {
               </button>
             </div>
             <button className="w-full mb-6 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50">
-              Create New Team
+              <Link
+                href="/dashboard/teams/create"
+                
+              >
+                Create new team
+              </Link>{" "}
             </button>
             <div className="space-y-4">
               {teams.map((team) => (
