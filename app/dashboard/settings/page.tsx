@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Copy, ChevronRight, ChevronDown, Globe, Lock, User, Mail, Camera, X, Shield, Bell, CreditCard } from "lucide-react";
+import Link from "next/link";
 
 const ProfileSettingsPage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -146,13 +147,13 @@ const ProfileSettingsPage = () => {
       {/* Settings Options */}
       <div className="space-y-4">
         {/* Configure Games ID */}
-        <button className="w-full bg-[#0a1628] border border-[#455872] rounded-xl p-5 flex items-center justify-between hover:border-cyan-400/50 transition-all group">
+        <Link href="/dashboard/games" className="w-full bg-[#0a1628] border border-[#455872] rounded-xl p-5 flex items-center justify-between hover:border-cyan-400/50 transition-all group">
           <div className="flex items-center gap-3">
             <User size={20} className="text-cyan-400" />
             <span className="text-white font-medium">Configure Games ID</span>
           </div>
           <ChevronRight size={20} className="text-gray-400 group-hover:text-cyan-400 transition-colors" />
-        </button>
+        </Link>
 
         {/* Change Password */}
         <div className="bg-[#0a1628] border border-[#455872] rounded-xl overflow-hidden">
