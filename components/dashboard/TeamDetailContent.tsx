@@ -25,6 +25,7 @@ interface Member {
 const TeamDetailContent = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [showTagModal, setShowTagModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const [newTag, setNewTag] = useState("");
   const [shareUrl] = useState("https://www.figma.com/design/muJXMFOHkSbpo60dbc");
@@ -356,6 +357,14 @@ const TeamDetailContent = () => {
                 </div>
               </div>
             )}
+
+            
+            // Edit Modal View
+            {
+              <section>
+
+              </section>
+            }
 
             {/* Current Tags */}
             {selectedMember.tags && selectedMember.tags.length > 0 && (
