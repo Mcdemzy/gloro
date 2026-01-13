@@ -57,6 +57,10 @@ const Sidebar = ({
       href: "/dashboard/communities",
       id: "communities",
       hasDropdown: true,
+      subItems: [
+        { label: "Tickets", href: "/dashboard/communities/tickets" },
+       
+      ],
     },
     {
       icon: Gamepad2,
