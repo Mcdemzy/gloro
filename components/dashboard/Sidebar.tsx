@@ -58,6 +58,7 @@ const Sidebar = ({
       id: "communities",
       hasDropdown: true,
       subItems: [
+        { label: "Channels", href: "/dashboard/communities/channels" },
         { label: "Tickets", href: "/dashboard/communities/tickets" },
        
       ],
