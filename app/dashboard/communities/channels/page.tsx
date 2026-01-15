@@ -132,9 +132,9 @@ const JoinedChannelsPage = () => {
               <Link
                 href={`/dashboard/communities/tickets`}
                 onClick={(e) => e.stopPropagation()}
-                className="px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded-lg text-sm font-medium transition-all"
+                // className="px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded-lg text-sm font-medium transition-all"
               >
-                View Tickets
+                {/* View Tickets */}
               </Link>
               <ChevronRight
                 size={24}

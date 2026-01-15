@@ -148,13 +148,13 @@ export default function TicketsPage() {
         <p className="text-gray-400 text-sm">
           Need help? Create a support ticket and our team will assist you.
         </p>
-        <button
+        {/* <button
           onClick={() => setShowCreateModal(true)}
           className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all flex items-center gap-2"
         >
           <Plus size={20} />
           Create Ticket
-        </button>
+        </button> */}
       </div>
 
       {/* Tickets List */}
