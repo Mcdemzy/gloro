@@ -1,11 +1,6 @@
 "use client";
-import { useState } from "react";
-import {
-  Plus,
-  X,
-  Search,
-  Settings2,
-} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, X, Search, Settings2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TournamentFormLayout from "@/components/creator/host/TournamentFormLayout";
 
@@ -15,10 +10,22 @@ interface SelectedGame {
   maxTeam: number;
 }
 
+interface TournamentStep1Data {
+  title: string;
+  coverImages: (string | null)[];
+  selectedGames: SelectedGame[];
+}
+
 export default function HostTournamentPage() {
   const router = useRouter();
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [title, setTitle] = useState("");
-  const [coverImages, setCoverImages] = useState<string[]>([null, null, null, null]);
+  const [coverImages, setCoverImages] = useState<(string | null)[]>([
+    null,
+    null,
+    null,
+    null,
+  ]);
   const [selectedGames, setSelectedGames] = useState<SelectedGame[]>([]);
   const [showGameModal, setShowGameModal] = useState(false);
   const [showTeamModal, setShowTeamModal] = useState(false);
@@ -34,12 +41,64 @@ export default function HostTournamentPage() {
     "Apex Mobile",
   ];
 
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const savedData = localStorage.getItem("tournament-step-1");
+    if (savedData) {
+      const data: TournamentStep1Data = JSON.parse(savedData);
+      setTitle(data.title || "");
+      setCoverImages(data.coverImages || [null, null, null, null]);
+      setSelectedGames(data.selectedGames || []);
+    }
+  }, []);
+
+  // Save data to localStorage whenever it changes
+  useEffect(() => {
+    const data: TournamentStep1Data = {
+      title,
+      coverImages,
+      selectedGames,
+    };
+    localStorage.setItem("tournament-step-1", JSON.stringify(data));
+  }, [title, coverImages, selectedGames]);
+
   const handleImageUpload = (index: number) => {
-    // Simulate file upload - in real app, you'd use file input
-    const mockImage = `https://images.unsplash.com/photo-${index + 1}?w=400&h=300&fit=crop`;
-    const newImages = [...coverImages];
-    newImages[index] = mockImage;
-    setCoverImages(newImages);
+    // Trigger file input click
+    if (fileInputRefs.current[index]) {
+      fileInputRefs.current[index]?.click();
+    }
+  };
+
+  const handleFileSelect = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check if file is an image
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file");
+      return;
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size should be less than 5MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageUrl = event.target?.result as string;
+      const newImages = [...coverImages];
+      newImages[index] = imageUrl;
+      setCoverImages(newImages);
+    };
+    reader.readAsDataURL(file);
+
+    // Reset file input
+    e.target.value = "";
   };
 
   const handleRemoveImage = (index: number, e: React.MouseEvent) => {
@@ -60,15 +119,31 @@ export default function HostTournamentPage() {
   };
 
   const handleTeamConfigSave = () => {
-    if (currentGame && !selectedGames.find((g) => g.name === currentGame)) {
-      setSelectedGames([
-        ...selectedGames,
-        {
+    if (currentGame) {
+      const existingGameIndex = selectedGames.findIndex(
+        (g) => g.name === currentGame,
+      );
+
+      if (existingGameIndex >= 0) {
+        // Update existing game
+        const updatedGames = [...selectedGames];
+        updatedGames[existingGameIndex] = {
           name: currentGame,
           minTeam: teamConfig.min,
           maxTeam: teamConfig.max,
-        },
-      ]);
+        };
+        setSelectedGames(updatedGames);
+      } else {
+        // Add new game
+        setSelectedGames([
+          ...selectedGames,
+          {
+            name: currentGame,
+            minTeam: teamConfig.min,
+            maxTeam: teamConfig.max,
+          },
+        ]);
+      }
     }
     setShowTeamModal(false);
     setCurrentGame("");
@@ -95,7 +170,12 @@ export default function HostTournamentPage() {
   );
 
   const handleSaveDraft = () => {
-    console.log("Saving draft:", { title, coverImages, selectedGames });
+    const data = {
+      title,
+      coverImages,
+      selectedGames,
+    };
+    localStorage.setItem("tournament-draft", JSON.stringify(data));
     alert("Tournament saved as draft!");
   };
 
@@ -104,14 +184,23 @@ export default function HostTournamentPage() {
       alert("Please enter a tournament title");
       return;
     }
-    
+
     if (selectedGames.length === 0) {
       alert("Please add at least one game");
       return;
     }
-    
+
     // Navigate to step 2
     router.push("/creator/host/tournament/step-2");
+  };
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem("tournament-step-1");
+    localStorage.removeItem("tournament-step-2");
+    localStorage.removeItem("tournament-step-3");
+    setTitle("");
+    setCoverImages([null, null, null, null]);
+    setSelectedGames([]);
   };
 
   return (
@@ -119,6 +208,7 @@ export default function HostTournamentPage() {
       currentStep={1}
       onSaveDraft={handleSaveDraft}
       onProceed={handleProceed}
+      onClear={clearLocalStorage}
     >
       {/* Title */}
       <div>
@@ -142,26 +232,38 @@ export default function HostTournamentPage() {
         </label>
         <div className="grid grid-cols-4 gap-4">
           {coverImages.map((img, index) => (
-            <div
-              key={index}
-              className="aspect-square relative group"
-            >
+            <div key={index} className="aspect-square relative group">
+              <input
+                type="file"
+                ref={(el) => (fileInputRefs.current[index] = el)}
+                className="hidden"
+                accept="image/*"
+                onChange={(e) => handleFileSelect(index, e)}
+              />
               <div
-                onClick={() => !img && handleImageUpload(index)}
-                className={`w-full h-full border-2 rounded-lg flex items-center justify-center cursor-pointer transition-all ${
+                onClick={() => handleImageUpload(index)}
+                className={`w-full h-full border-2 rounded-lg flex items-center justify-center cursor-pointer transition-all overflow-hidden ${
                   img
-                    ? "border-cyan-500/30 bg-cover bg-center"
+                    ? "border-cyan-500/30"
                     : "border-dashed border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/5"
                 }`}
-                style={img ? { backgroundImage: `url(${img})` } : {}}
               >
-                {!img && <Plus size={32} className="text-cyan-400" />}
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`Cover ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Plus size={32} className="text-cyan-400" />
+                )}
               </div>
-              
+
               {img && (
                 <button
+                  type="button"
                   onClick={(e) => handleRemoveImage(index, e)}
-                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors"
+                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors z-10"
                 >
                   <X size={14} />
                 </button>
@@ -169,7 +271,9 @@ export default function HostTournamentPage() {
             </div>
           ))}
         </div>
-        <p className="text-gray-400 text-sm mt-2">Upload 4 images for best display</p>
+        <p className="text-gray-400 text-sm mt-2">
+          Upload 4 images for best display (Max 5MB each)
+        </p>
       </div>
 
       {/* Games List */}
@@ -219,7 +323,7 @@ export default function HostTournamentPage() {
               </div>
             </div>
           ))}
-          
+
           {selectedGames.length === 0 && (
             <p className="text-gray-400 text-center py-4">
               No games added yet. Click the button above to add games.
@@ -299,7 +403,10 @@ export default function HostTournamentPage() {
                   onChange={(e) =>
                     setTeamConfig({
                       ...teamConfig,
-                      min: parseInt(e.target.value) || 2,
+                      min: Math.max(
+                        1,
+                        Math.min(20, parseInt(e.target.value) || 2),
+                      ),
                     })
                   }
                   className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400"
@@ -312,13 +419,16 @@ export default function HostTournamentPage() {
                 </label>
                 <input
                   type="number"
-                  min="1"
+                  min={teamConfig.min}
                   max="20"
                   value={teamConfig.max}
                   onChange={(e) =>
                     setTeamConfig({
                       ...teamConfig,
-                      max: parseInt(e.target.value) || 6,
+                      max: Math.max(
+                        teamConfig.min,
+                        Math.min(20, parseInt(e.target.value) || 6),
+                      ),
                     })
                   }
                   className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400"
@@ -338,7 +448,9 @@ export default function HostTournamentPage() {
                   onClick={handleTeamConfigSave}
                   className="flex-1 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg font-semibold transition-all shadow-lg"
                 >
-                  {selectedGames.find(g => g.name === currentGame) ? 'Update' : 'Add'}
+                  {selectedGames.find((g) => g.name === currentGame)
+                    ? "Update"
+                    : "Add"}
                 </button>
               </div>
             </div>

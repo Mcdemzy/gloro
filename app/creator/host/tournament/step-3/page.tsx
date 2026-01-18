@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Upload, X, FileText, Bold, Italic, Underline } from "lucide-react";
 import { useRouter } from "next/navigation";
-import TournamentFormLayout from "@/app/creator/components/TournamentFormLayout";
+import TournamentFormLayout from "@/components/creator/host/TournamentFormLayout";
 
 interface UploadedRule {
   game: string;
