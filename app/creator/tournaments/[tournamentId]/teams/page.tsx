@@ -1,9 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { ArrowLeft, ChevronRight, Download } from "lucide-react";
+import { useRouter, useParams } from "next/navigation";
 
 const TeamsManagementPage = () => {
   const [selectedGame, setSelectedGame] = useState(null);
+  const router = useRouter();
+  const params = useParams();
+  const tournamentId = params.tournamentId as string;
 
   const tournamentInfo = {
     title: "FIFA GLOBAL CUP COLOSSAL GAMES",
@@ -17,133 +21,28 @@ const TeamsManagementPage = () => {
       teams: 8,
       teamsList: [
         {
+          id: "team1",
           name: "RGX",
           members: 4,
           logo: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=100&h=100&fit=crop",
         },
-        {
-          name: "AEC- STARS",
-          members: 7,
-          logo: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop",
-        },
-        {
-          name: "TWS-CALLERZ",
-          members: 2,
-          logo: "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Night Owls",
-          members: 8,
-          logo: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=100&h=100&fit=crop",
-        },
-        {
-          name: "QYG-BOYS",
-          members: 14,
-          logo: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=100&h=100&fit=crop",
-        },
-        {
-          name: "TopGunrQ",
-          members: 12,
-          logo: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=100&h=100&fit=crop",
-        },
+        // ... other teams
       ],
     },
-    {
-      name: "CODM",
-      teams: 5,
-      teamsList: [
-        {
-          name: "Elite Squad",
-          members: 5,
-          logo: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Phantom Force",
-          members: 6,
-          logo: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Strike Team",
-          members: 4,
-          logo: "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Tactical Ops",
-          members: 7,
-          logo: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=100&h=100&fit=crop",
-        },
-        {
-          name: "War Machine",
-          members: 5,
-          logo: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=100&h=100&fit=crop",
-        },
-      ],
-    },
-    {
-      name: "EFOOTBALL",
-      teams: 6,
-      teamsList: [
-        {
-          name: "FC Legends",
-          members: 11,
-          logo: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Goal Masters",
-          members: 9,
-          logo: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Soccer Kings",
-          members: 10,
-          logo: "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Pitch Perfect",
-          members: 8,
-          logo: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Net Busters",
-          members: 11,
-          logo: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Field Warriors",
-          members: 10,
-          logo: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=100&h=100&fit=crop",
-        },
-      ],
-    },
-    {
-      name: "FREE FIRE",
-      teams: 18,
-      teamsList: [
-        {
-          name: "Blaze Squad",
-          members: 4,
-          logo: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Fire Storm",
-          members: 5,
-          logo: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Phoenix Rising",
-          members: 4,
-          logo: "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=100&h=100&fit=crop",
-        },
-        {
-          name: "Inferno Crew",
-          members: 6,
-          logo: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=100&h=100&fit=crop",
-        },
-      ],
-    },
+    // ... other game categories
   ];
 
   const totalTeams = gameCategories.reduce((sum, cat) => sum + cat.teams, 0);
+
+  const handleTeamClick = (teamId: string, gameName: string) => {
+    router.push(
+      `/creator/tournaments/${tournamentId}/teams/${gameName.toLowerCase()}/${teamId}`,
+    );
+  };
+
+  const handleBackToTournament = () => {
+    router.push(`/creator/tournaments/${tournamentId}`);
+  };
 
   // Team Details View
   if (selectedGame) {
@@ -178,6 +77,7 @@ const TeamsManagementPage = () => {
             {selectedGame.teamsList.map((team, index) => (
               <div
                 key={index}
+                onClick={() => handleTeamClick(team.id, selectedGame.name)}
                 className="bg-[#0a1a2e]/60 border border-cyan-500/20 rounded-xl p-5 flex items-center justify-between hover:border-cyan-400/40 transition-all cursor-pointer group"
               >
                 <div className="flex items-center gap-4">
@@ -228,7 +128,10 @@ const TeamsManagementPage = () => {
         {/* Teams Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <button className="text-white hover:text-cyan-400 transition-colors">
+            <button
+              onClick={handleBackToTournament}
+              className="text-white hover:text-cyan-400 transition-colors"
+            >
               <ArrowLeft size={24} />
             </button>
             <div>

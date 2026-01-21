@@ -217,7 +217,7 @@ const TournamentManagersPage = () => {
                 {/* Invite Button */}
                 <button
                   onClick={handleSendInvites}
-                  disabled={emailList.length === 0}
+                  // disabled={emailList.length === 0}
                   className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-all shadow-lg flex items-center justify-center gap-2"
                 >
                   <Send size={18} />
