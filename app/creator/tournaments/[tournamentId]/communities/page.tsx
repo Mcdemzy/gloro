@@ -269,7 +269,7 @@ export default function CommunitiesManagement() {
             </div>
 
             {/* Messages */}
-            <div className="p-6 space-y-6 max-h-[600px] overflow-y-auto bg-[#0a2d36]/40">
+            <div className="p-6 space-y-6 max-h-[600px] overflow-y-auto bg-[#]/40 mb-20 float-right max-w-120">
               {channelMessages.map((msg) => (
                 <div key={msg.id} className="flex gap-3">
                   <div
@@ -300,7 +300,7 @@ export default function CommunitiesManagement() {
             </div>
 
             {/* Message Input */}
-            <div className="bg-[#0a2d36]/80 border-t border-cyan-500/20 p-5">
+            <div className="bg-[#0a2d36]/80 border-t border-cyan-500/20 p-5 absolute bottom-0 w-full">
               <div className="flex items-center gap-3">
                 <input
                   type="text"
