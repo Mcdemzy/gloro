@@ -2,14 +2,20 @@
 import React, { useState } from "react";
 import { ChevronLeft, X, Send, UserX } from "lucide-react";
 
-const TournamentManagersPage = () => {
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const [managerToRemove, setManagerToRemove] = useState(null);
-  const [emailInput, setEmailInput] = useState("");
-  const [emailList, setEmailList] = useState([]);
+interface Manager {
+  id: number;
+  name: string;
+  avatar: string;
+}
 
-  const [managers, setManagers] = useState([
+const TournamentManagersPage = () => {
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
+  const [showRemoveModal, setShowRemoveModal] = useState<boolean>(false);
+  const [managerToRemove, setManagerToRemove] = useState<Manager | null>(null);
+  const [emailInput, setEmailInput] = useState<string>("");
+  const [emailList, setEmailList] = useState<string[]>([]);
+
+  const [managers, setManagers] = useState<Manager[]>([
     {
       id: 1,
       name: "Ahmad Amir",
@@ -77,7 +83,7 @@ const TournamentManagersPage = () => {
     }
   };
 
-  const handleRemoveEmail = (index) => {
+  const handleRemoveEmail = (index: number) => {
     setEmailList(emailList.filter((_, i) => i !== index));
   };
 
@@ -90,7 +96,7 @@ const TournamentManagersPage = () => {
     }
   };
 
-  const openRemoveModal = (manager) => {
+  const openRemoveModal = (manager: Manager) => {
     setManagerToRemove(manager);
     setShowRemoveModal(true);
   };
@@ -217,7 +223,7 @@ const TournamentManagersPage = () => {
                 {/* Invite Button */}
                 <button
                   onClick={handleSendInvites}
-                  // disabled={emailList.length === 0}
+                  disabled={emailList.length === 0}
                   className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-all shadow-lg flex items-center justify-center gap-2"
                 >
                   <Send size={18} />

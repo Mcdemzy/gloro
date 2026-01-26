@@ -3,13 +3,25 @@ import { useState } from "react";
 import { ArrowLeft, Send, MessageSquare, Ticket } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 
+interface Community {
+  id: number;
+  game: string;
+  name: string;
+  members: number;
+  avatar: string;
+}
+
 export default function CommunitiesManagement() {
   const router = useRouter();
   const params = useParams();
   const tournamentId = params.tournamentId as string;
 
-  const [currentView, setCurrentView] = useState("main"); // main, channel, tickets
-  const [selectedCommunity, setSelectedCommunity] = useState(null);
+  const [currentView, setCurrentView] = useState<
+    "main" | "channel" | "tickets"
+  >("main");
+  const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
+    null,
+  );
   const [message, setMessage] = useState("");
 
   const tournamentInfo = {
@@ -17,7 +29,7 @@ export default function CommunitiesManagement() {
     date: "2nd December, 2025 - 28 December, 2025",
   };
 
-  const communities = [
+  const communities: Community[] = [
     {
       id: 1,
       game: "PUBG",
@@ -134,6 +146,7 @@ export default function CommunitiesManagement() {
   };
 
   const handleViewTicketDetails = (ticketId: number) => {
+    if (!selectedCommunity) return; // Add null check
     router.push(
       `/creator/tournaments/${tournamentId}/communities/${selectedCommunity.id}/tickets/${ticketId}`,
     );
@@ -384,4 +397,6 @@ export default function CommunitiesManagement() {
       </div>
     );
   }
+
+  return null;
 }

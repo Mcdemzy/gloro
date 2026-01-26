@@ -208,7 +208,7 @@ export default function HostTournamentPage() {
       currentStep={1}
       onSaveDraft={handleSaveDraft}
       onProceed={handleProceed}
-      onClear={clearLocalStorage}
+      // onClear={clearLocalStorage}
     >
       {/* Title */}
       <div>
@@ -235,7 +235,9 @@ export default function HostTournamentPage() {
             <div key={index} className="aspect-square relative group">
               <input
                 type="file"
-                ref={(el) => (fileInputRefs.current[index] = el)}
+                ref={(el) => {
+                  fileInputRefs.current[index] = el;
+                }}
                 className="hidden"
                 accept="image/*"
                 onChange={(e) => handleFileSelect(index, e)}

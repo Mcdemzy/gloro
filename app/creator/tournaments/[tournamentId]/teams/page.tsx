@@ -3,8 +3,21 @@ import React, { useState } from "react";
 import { ArrowLeft, ChevronRight, Download } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 
+interface Team {
+  id: string;
+  name: string;
+  members: number;
+  logo: string;
+}
+
+interface GameCategory {
+  name: string;
+  teams: number;
+  teamsList: Team[];
+}
+
 const TeamsManagementPage = () => {
-  const [selectedGame, setSelectedGame] = useState(null);
+  const [selectedGame, setSelectedGame] = useState<GameCategory | null>(null);
   const router = useRouter();
   const params = useParams();
   const tournamentId = params.tournamentId as string;
@@ -15,7 +28,7 @@ const TeamsManagementPage = () => {
     endDate: "28 December, 2025",
   };
 
-  const gameCategories = [
+  const gameCategories: GameCategory[] = [
     {
       name: "PUBG",
       teams: 8,
@@ -76,7 +89,7 @@ const TeamsManagementPage = () => {
           <div className="space-y-4">
             {selectedGame.teamsList.map((team, index) => (
               <div
-                key={index}
+                key={team.id}
                 onClick={() => handleTeamClick(team.id, selectedGame.name)}
                 className="bg-[#0a1a2e]/60 border border-cyan-500/20 rounded-xl p-5 flex items-center justify-between hover:border-cyan-400/40 transition-all cursor-pointer group"
               >
@@ -151,7 +164,7 @@ const TeamsManagementPage = () => {
           <div className="lg:col-span-2 grid grid-cols-2 gap-6">
             {gameCategories.map((category, index) => (
               <div
-                key={index}
+                key={category.name}
                 onClick={() => setSelectedGame(category)}
                 className="relative bg-gradient-to-br from-[#1a0a2e]/60 to-[#0f051d]/60 border border-purple-500/30 rounded-xl p-6 hover:border-purple-400/50 transition-all cursor-pointer group overflow-hidden"
               >
