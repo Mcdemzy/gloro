@@ -1,11 +1,14 @@
-import TeamDetailContent from "@/components/dashboard/TeamDetailContent";
-
-interface TeamDetailPageProps {
-  params: {
-    teamId: string;
-  };
+// components/dashboard/TeamDetailContent.tsx
+interface TeamDetailContentProps {
+  teamId: string;
 }
 
-export default function TeamDetailPage({ params }: TeamDetailPageProps) {
-  return <TeamDetailContent teamId={params.teamId} />;
+export default function TeamDetailContent({ teamId }: TeamDetailContentProps) {
+  // Your component logic here
+  return (
+    <div>
+      <h1>Team Detail: {teamId}</h1>
+      {/* ... rest of your component */}
+    </div>
+  );
 }

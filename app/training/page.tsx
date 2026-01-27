@@ -3,8 +3,23 @@ import React, { useState } from "react";
 import { Search, Calendar, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/shared/Navbar";
 
+// Define interfaces for type safety
+interface Training {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+  category: string;
+}
+
+interface TrainingDetailProps {
+  training: Training;
+  onBack: () => void;
+}
+
 // Training Data
-const trainingData = [
+const trainingData: Training[] = [
   {
     id: 1,
     title: "Introduction to GloroQ Game Tournament",
@@ -97,125 +112,8 @@ const trainingData = [
   },
 ];
 
-// Main Training Page Component (for the <section> part of your page)
-const TrainingSection = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTraining, setSelectedTraining] = useState(null);
-
-  const filteredData = trainingData.filter(
-    (item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  if (selectedTraining) {
-    return (
-      <TrainingDetail
-        training={selectedTraining}
-        onBack={() => setSelectedTraining(null)}
-      />
-    );
-  }
-
-  return (
-    <main>
-      <Navbar />
-      <div className="w-full bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a] min-h-screen">
-        {/* Hero Section */}
-        <div className="w-full px-6 md:px-12 lg:px-24 pt-40 pb-12">
-          <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              ENJOY YOUR <br />
-              <span className="text-[#3b82f6]">TRAINING</span>
-            </h1>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-12">
-              All your gaming essentials in one place. Tournaments, news,
-              streams and community—designed for players and creators.
-            </p>
-
-            {/* Search Bar */}
-            <div className="max-w-xl mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#1a1a2e]/60 backdrop-blur-sm border border-gray-700/50 rounded-lg pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#3b82f6]"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Training Cards Grid */}
-        <div className="w-full px-6 md:px-12 lg:px-24 pb-20">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {filteredData.map((training) => (
-                <div
-                  key={training.id}
-                  className="bg-[#1a1a2e]/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-800/50 hover:border-gray-700 transition-all cursor-pointer group"
-                  onClick={() => setSelectedTraining(training)}
-                >
-                  {/* Card Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <img
-                      src={training.image}
-                      alt={training.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-xl font-semibold text-white flex-1 line-clamp-2">
-                        {training.title}
-                      </h3>
-                      <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-[#3b82f6] transition-colors flex-shrink-0 ml-2" />
-                    </div>
-
-                    <p className="text-gray-400 text-sm mb-6 line-clamp-2">
-                      {training.description}
-                    </p>
-
-                    <div className="flex items-center text-gray-500 text-sm">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      {training.date}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Load More Button */}
-            <div className="text-center">
-              <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium px-8 py-3 rounded-lg transition-all inline-flex items-center gap-2">
-                Load More
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-};
-
 // Training Detail Page Component
-const TrainingDetail = ({ training, onBack }) => {
+const TrainingDetail = ({ training, onBack }: TrainingDetailProps) => {
   return (
     <div className="w-full bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a] min-h-screen">
       <div className="w-full px-6 md:px-12 lg:px-24 py-20">
@@ -325,6 +223,125 @@ const TrainingDetail = ({ training, onBack }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+// Main Training Page Component (for the <section> part of your page)
+const TrainingSection = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedTraining, setSelectedTraining] = useState<Training | null>(
+    null,
+  );
+
+  const filteredData = trainingData.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  if (selectedTraining) {
+    return (
+      <TrainingDetail
+        training={selectedTraining}
+        onBack={() => setSelectedTraining(null)}
+      />
+    );
+  }
+
+  return (
+    <main>
+      <Navbar />
+      <div className="w-full bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a] min-h-screen">
+        {/* Hero Section */}
+        <div className="w-full px-6 md:px-12 lg:px-24 pt-40 pb-12">
+          <div className="max-w-7xl mx-auto text-center">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+              ENJOY YOUR <br />
+              <span className="text-[#3b82f6]">TRAINING</span>
+            </h1>
+            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-12">
+              All your gaming essentials in one place. Tournaments, news,
+              streams and community—designed for players and creators.
+            </p>
+
+            {/* Search Bar */}
+            <div className="max-w-xl mx-auto relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#1a1a2e]/60 backdrop-blur-sm border border-gray-700/50 rounded-lg pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#3b82f6]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Training Cards Grid */}
+        <div className="w-full px-6 md:px-12 lg:px-24 pb-20">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {filteredData.map((training) => (
+                <div
+                  key={training.id}
+                  className="bg-[#1a1a2e]/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-800/50 hover:border-gray-700 transition-all cursor-pointer group"
+                  onClick={() => setSelectedTraining(training)}
+                >
+                  {/* Card Image */}
+                  <div className="relative h-56 overflow-hidden">
+                    <img
+                      src={training.image}
+                      alt={training.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="text-xl font-semibold text-white flex-1 line-clamp-2">
+                        {training.title}
+                      </h3>
+                      <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-[#3b82f6] transition-colors flex-shrink-0 ml-2" />
+                    </div>
+
+                    <p className="text-gray-400 text-sm mb-6 line-clamp-2">
+                      {training.description}
+                    </p>
+
+                    <div className="flex items-center text-gray-500 text-sm">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      {training.date}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            <div className="text-center">
+              <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium px-8 py-3 rounded-lg transition-all inline-flex items-center gap-2">
+                Load More
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 };
 

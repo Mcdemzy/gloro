@@ -14,19 +14,35 @@ import {
   Tag,
 } from "lucide-react";
 
+interface Member {
+  id: number;
+  name: string;
+  gloroId: string;
+  tags?: string[];
+  avatar: string;
+}
+
+interface TeamData {
+  name: string;
+  description: string;
+  slogan: string;
+  currentTournaments: number;
+  image: string;
+}
+
 const TeamDetailContent = () => {
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [showTagModal, setShowTagModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const [memberToRemove, setMemberToRemove] = useState(null);
-  const [selectedMemberId, setSelectedMemberId] = useState(null);
-  const [newTag, setNewTag] = useState("");
-  const [shareUrl] = useState(
-    "https://www.figma.com/design/muJXMFOHkSbpo60dbc"
+  const [showShareModal, setShowShareModal] = useState<boolean>(false);
+  const [showTagModal, setShowTagModal] = useState<boolean>(false);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showRemoveModal, setShowRemoveModal] = useState<boolean>(false);
+  const [memberToRemove, setMemberToRemove] = useState<Member | null>(null);
+  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
+  const [newTag, setNewTag] = useState<string>("");
+  const [shareUrl] = useState<string>(
+    "https://www.figma.com/design/muJXMFOHkSbpo60dbc",
   );
 
-  const [teamData, setTeamData] = useState({
+  const [teamData, setTeamData] = useState<TeamData>({
     name: "Top Gunner Ash",
     description:
       "We strike from the shadows, leave no second chance precision, power, and fire in every shot",
@@ -36,11 +52,11 @@ const TeamDetailContent = () => {
       "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=400&h=400&fit=crop",
   });
 
-  const [editTeamData, setEditTeamData] = useState({ ...teamData });
-  const [newMemberIds, setNewMemberIds] = useState([]);
-  const [newMemberInput, setNewMemberInput] = useState("");
+  const [editTeamData, setEditTeamData] = useState<TeamData>({ ...teamData });
+  const [newMemberIds, setNewMemberIds] = useState<string[]>([]);
+  const [newMemberInput, setNewMemberInput] = useState<string>("");
 
-  const [members, setMembers] = useState([
+  const [members, setMembers] = useState<Member[]>([
     {
       id: 1,
       name: "John Abagnale",
@@ -81,7 +97,7 @@ const TeamDetailContent = () => {
     },
   ]);
 
-  const availableRoles = [
+  const availableRoles: string[] = [
     "Team leader",
     "Assistant Team Leader",
     "Sniper",
@@ -90,18 +106,17 @@ const TeamDetailContent = () => {
     "Substitute",
   ];
 
-
   const copyShareUrl = () => {
     navigator.clipboard.writeText(shareUrl);
   };
 
-  const openTagModal = (memberId) => {
+  const openTagModal = (memberId: number) => {
     setSelectedMemberId(memberId);
     setShowTagModal(true);
     setNewTag("");
   };
 
-  const openRemoveModal = (member) => {
+  const openRemoveModal = (member: Member) => {
     setMemberToRemove(member);
     setShowRemoveModal(true);
   };
@@ -114,7 +129,7 @@ const TeamDetailContent = () => {
     }
   };
 
-  const addTagToMember = (roleToAdd) => {
+  const addTagToMember = (roleToAdd: string) => {
     if (selectedMemberId === null) return;
 
     setMembers(
@@ -126,7 +141,7 @@ const TeamDetailContent = () => {
           }
         }
         return member;
-      })
+      }),
     );
   };
 
@@ -142,12 +157,12 @@ const TeamDetailContent = () => {
           }
         }
         return member;
-      })
+      }),
     );
     setNewTag("");
   };
 
-  const removeTagFromMember = (memberId, tagToRemove) => {
+  const removeTagFromMember = (memberId: number, tagToRemove: string) => {
     setMembers(
       members.map((member) => {
         if (member.id === memberId) {
@@ -157,16 +172,16 @@ const TeamDetailContent = () => {
           };
         }
         return member;
-      })
+      }),
     );
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setEditTeamData({ ...editTeamData, image: reader.result });
+        setEditTeamData({ ...editTeamData, image: reader.result as string });
       };
       reader.readAsDataURL(file);
     }
@@ -182,7 +197,7 @@ const TeamDetailContent = () => {
     }
   };
 
-  const removeNewMemberId = (id) => {
+  const removeNewMemberId = (id: string) => {
     setNewMemberIds(newMemberIds.filter((memberId) => memberId !== id));
   };
 
@@ -564,8 +579,8 @@ const TeamDetailContent = () => {
                         isSelected
                           ? "bg-cyan-500/30 text-cyan-400 cursor-not-allowed"
                           : (selectedMember.tags?.length || 0) >= 2
-                          ? "bg-white/5 text-gray-600 cursor-not-allowed"
-                          : "bg-[#0d1f35] hover:bg-[#1a2f45] text-white"
+                            ? "bg-white/5 text-gray-600 cursor-not-allowed"
+                            : "bg-[#0d1f35] hover:bg-[#1a2f45] text-white"
                       }`}
                     >
                       <span className="font-medium">{role}</span>

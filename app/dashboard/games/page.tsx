@@ -2,17 +2,31 @@
 import React, { useState } from "react";
 import { Search, ChevronRight, X, AlertTriangle } from "lucide-react";
 
+interface Game {
+  id: number;
+  name: string;
+  image: string;
+  configured: boolean;
+  year?: string;
+}
+
+interface ConfigForm {
+  username: string;
+  inGameId: string;
+  email: string;
+}
+
 const ConfigureGamesIDPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showConfigModal, setShowConfigModal] = useState(false);
-  const [selectedGame, setSelectedGame] = useState(null);
-  const [configForm, setConfigForm] = useState({
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showConfigModal, setShowConfigModal] = useState<boolean>(false);
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  const [configForm, setConfigForm] = useState<ConfigForm>({
     username: "",
     inGameId: "",
     email: "",
   });
 
-  const games = [
+  const games: Game[] = [
     {
       id: 1,
       name: "Call of Duty Mobile",
@@ -52,10 +66,10 @@ const ConfigureGamesIDPage = () => {
   ];
 
   const filteredGames = games.filter((game) =>
-    game.name.toLowerCase().includes(searchQuery.toLowerCase())
+    game.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const handleConfigure = (game) => {
+  const handleConfigure = (game: Game) => {
     setSelectedGame(game);
     setShowConfigModal(true);
     setConfigForm({
@@ -67,14 +81,16 @@ const ConfigureGamesIDPage = () => {
 
   const handleSave = () => {
     // Save configuration
-    console.log("Saving config for", selectedGame.name, configForm);
+    if (selectedGame) {
+      console.log("Saving config for", selectedGame.name, configForm);
+    }
     setShowConfigModal(false);
     setSelectedGame(null);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#020818] via-[#0a1628] to-[#020818] p-8">
-      <div className="max-l mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Page Title */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">

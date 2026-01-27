@@ -1,12 +1,25 @@
 "use client";
 import React, { useState } from "react";
-import { Copy, ChevronRight, ChevronDown, Globe, Lock, User, Mail, Camera, X, Shield, Bell, CreditCard } from "lucide-react";
+import {
+  Copy,
+  ChevronRight,
+  ChevronDown,
+  Globe,
+  Lock,
+  User,
+  Mail,
+  Camera,
+  X,
+  Shield,
+  Bell,
+  CreditCard,
+} from "lucide-react";
 import Link from "next/link";
 
 const ProfileSettingsPage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [changePasswordExpanded, setChangePasswordExpanded] = useState(false);
-  
+
   // Profile data
   const [profileData, setProfileData] = useState({
     firstName: "Raymond",
@@ -19,8 +32,8 @@ const ProfileSettingsPage = () => {
     linkedinLink: "",
     telegramLink: "",
     bio: "I play to win, not just to play. From casual matches to ranked wars I bring chaos, fire, and a bit of chaos. Tactical mind Steely aim 🎮",
-    avatar: null,
-    joinedDate: "November 2025"
+    avatar: null as string | null,
+    joinedDate: "November 2025",
   });
 
   // Edit form state
@@ -64,7 +77,11 @@ const ProfileSettingsPage = () => {
             {/* Avatar */}
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white text-4xl font-bold relative group">
               {profileData.avatar ? (
-                <img src={profileData.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+                <img
+                  src={profileData.avatar}
+                  alt="Avatar"
+                  className="w-full h-full rounded-full object-cover"
+                />
               ) : (
                 "R"
               )}
@@ -75,26 +92,46 @@ const ProfileSettingsPage = () => {
 
             {/* Profile Info */}
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">Raymond Thomas</h2>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Raymond Thomas
+              </h2>
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-gray-400">Gloro ID: {profileData.gloroId}</span>
-                <button onClick={copyGloroId} className="text-cyan-400 hover:text-cyan-300 transition-colors">
+                <span className="text-gray-400">
+                  Gloro ID: {profileData.gloroId}
+                </span>
+                <button
+                  onClick={copyGloroId}
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
                   <Copy size={16} />
                 </button>
               </div>
               <div className="space-y-1">
-                <p className="text-gray-400 text-sm">Username: {profileData.username}</p>
-                <p className="text-gray-400 text-sm">Email address: {profileData.email}</p>
+                <p className="text-gray-400 text-sm">
+                  Username: {profileData.username}
+                </p>
+                <p className="text-gray-400 text-sm">
+                  Email address: {profileData.email}
+                </p>
               </div>
               {/* Social Links */}
               <div className="flex gap-2 mt-3">
-                <a href="#" className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all">
+                <a
+                  href="#"
+                  className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all"
+                >
                   <span className="text-sm">𝕏</span>
                 </a>
-                <a href="#" className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all">
+                <a
+                  href="#"
+                  className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all"
+                >
                   <span className="text-sm">in</span>
                 </a>
-                <a href="#" className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all">
+                <a
+                  href="#"
+                  className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all"
+                >
                   <span className="text-sm">📱</span>
                 </a>
               </div>
@@ -102,7 +139,7 @@ const ProfileSettingsPage = () => {
           </div>
 
           {/* Edit Button */}
-          <button 
+          <button
             onClick={() => setShowEditModal(true)}
             className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all"
           >
@@ -117,7 +154,9 @@ const ProfileSettingsPage = () => {
             <p className="text-gray-400 text-sm leading-relaxed mb-4">
               {profileData.bio}
             </p>
-            <p className="text-gray-500 text-xs">• Joined since {profileData.joinedDate}</p>
+            <p className="text-gray-500 text-xs">
+              • Joined since {profileData.joinedDate}
+            </p>
           </div>
 
           {/* Profile Warning */}
@@ -125,15 +164,20 @@ const ProfileSettingsPage = () => {
             <div className="flex items-start gap-3 mb-4">
               <span className="text-2xl">⚠️</span>
               <div className="flex-1">
-                <h3 className="text-red-400 font-semibold mb-1">Profile update required</h3>
+                <h3 className="text-red-400 font-semibold mb-1">
+                  Profile update required
+                </h3>
                 <p className="text-gray-300 text-sm">
-                  Profile update completion is compulsory before being able to apply for Tournaments.
+                  Profile update completion is compulsory before being able to
+                  apply for Tournaments.
                 </p>
               </div>
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-white font-semibold text-sm">Progress</span>
+                <span className="text-white font-semibold text-sm">
+                  Progress
+                </span>
                 <span className="text-cyan-400 text-sm">67%</span>
               </div>
               <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
@@ -147,17 +191,23 @@ const ProfileSettingsPage = () => {
       {/* Settings Options */}
       <div className="space-y-4">
         {/* Configure Games ID */}
-        <Link href="/dashboard/games" className="w-full bg-[#0a1628] border border-[#455872] rounded-xl p-5 flex items-center justify-between hover:border-cyan-400/50 transition-all group">
+        <Link
+          href="/dashboard/games"
+          className="w-full bg-[#0a1628] border border-[#455872] rounded-xl p-5 flex items-center justify-between hover:border-cyan-400/50 transition-all group"
+        >
           <div className="flex items-center gap-3">
             <User size={20} className="text-cyan-400" />
             <span className="text-white font-medium">Configure Games ID</span>
           </div>
-          <ChevronRight size={20} className="text-gray-400 group-hover:text-cyan-400 transition-colors" />
+          <ChevronRight
+            size={20}
+            className="text-gray-400 group-hover:text-cyan-400 transition-colors"
+          />
         </Link>
 
         {/* Change Password */}
         <div className="bg-[#0a1628] border border-[#455872] rounded-xl overflow-hidden">
-          <button 
+          <button
             onClick={() => setChangePasswordExpanded(!changePasswordExpanded)}
             className="w-full p-5 flex items-center justify-between hover:bg-white/5 transition-all"
           >
@@ -165,12 +215,12 @@ const ProfileSettingsPage = () => {
               <Lock size={20} className="text-cyan-400" />
               <span className="text-white font-medium">Change Password</span>
             </div>
-            <ChevronDown 
-              size={20} 
-              className={`text-gray-400 transition-transform ${changePasswordExpanded ? 'rotate-180' : ''}`} 
+            <ChevronDown
+              size={20}
+              className={`text-gray-400 transition-transform ${changePasswordExpanded ? "rotate-180" : ""}`}
             />
           </button>
-          
+
           {changePasswordExpanded && (
             <div className="px-5 pb-5 space-y-4">
               <input
@@ -201,7 +251,10 @@ const ProfileSettingsPage = () => {
             <Shield size={20} className="text-cyan-400" />
             <span className="text-white font-medium">Account Security</span>
           </div>
-          <ChevronRight size={20} className="text-gray-400 group-hover:text-cyan-400 transition-colors" />
+          <ChevronRight
+            size={20}
+            className="text-gray-400 group-hover:text-cyan-400 transition-colors"
+          />
         </button>
 
         {/* Notifications */}
@@ -210,7 +263,10 @@ const ProfileSettingsPage = () => {
             <Bell size={20} className="text-cyan-400" />
             <span className="text-white font-medium">Notifications</span>
           </div>
-          <ChevronRight size={20} className="text-gray-400 group-hover:text-cyan-400 transition-colors" />
+          <ChevronRight
+            size={20}
+            className="text-gray-400 group-hover:text-cyan-400 transition-colors"
+          />
         </button>
 
         {/* Billing & Payments */}
@@ -219,7 +275,10 @@ const ProfileSettingsPage = () => {
             <CreditCard size={20} className="text-cyan-400" />
             <span className="text-white font-medium">Billing & Payments</span>
           </div>
-          <ChevronRight size={20} className="text-gray-400 group-hover:text-cyan-400 transition-colors" />
+          <ChevronRight
+            size={20}
+            className="text-gray-400 group-hover:text-cyan-400 transition-colors"
+          />
         </button>
 
         {/* Preferred Languages */}
@@ -228,7 +287,10 @@ const ProfileSettingsPage = () => {
             <Globe size={20} className="text-cyan-400" />
             <span className="text-white font-medium">Preferred languages</span>
           </div>
-          <ChevronRight size={20} className="text-gray-400 group-hover:text-cyan-400 transition-colors" />
+          <ChevronRight
+            size={20}
+            className="text-gray-400 group-hover:text-cyan-400 transition-colors"
+          />
         </button>
       </div>
 
@@ -236,7 +298,7 @@ const ProfileSettingsPage = () => {
       {showEditModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setShowEditModal(false)}
           ></div>
@@ -246,7 +308,7 @@ const ProfileSettingsPage = () => {
             <div className="sticky top-0 bg-[#0a1628] border-b border-[#455872] p-6 z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-white">Edit profile</h2>
-                <button 
+                <button
                   onClick={() => setShowEditModal(false)}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
@@ -261,7 +323,11 @@ const ProfileSettingsPage = () => {
                 <label className="relative cursor-pointer group">
                   <div className="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white text-5xl font-bold overflow-hidden">
                     {editForm.avatar ? (
-                      <img src={editForm.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                      <img
+                        src={editForm.avatar}
+                        alt="Avatar"
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       "R"
                     )}
@@ -284,25 +350,39 @@ const ProfileSettingsPage = () => {
               {/* Name Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">First name</label>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    First name
+                  </label>
                   <div className="relative">
-                    <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <User
+                      size={18}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
                     <input
                       type="text"
                       value={editForm.firstName}
-                      onChange={(e) => handleEditChange('firstName', e.target.value)}
+                      onChange={(e) =>
+                        handleEditChange("firstName", e.target.value)
+                      }
                       className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">Last name</label>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Last name
+                  </label>
                   <div className="relative">
-                    <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <User
+                      size={18}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
                     <input
                       type="text"
                       value={editForm.lastName}
-                      onChange={(e) => handleEditChange('lastName', e.target.value)}
+                      onChange={(e) =>
+                        handleEditChange("lastName", e.target.value)
+                      }
                       className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                     />
                   </div>
@@ -311,13 +391,20 @@ const ProfileSettingsPage = () => {
 
               {/* Username */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Username</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Username
+                </label>
                 <div className="relative">
-                  <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <User
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
                   <input
                     type="text"
                     value={editForm.username}
-                    onChange={(e) => handleEditChange('username', e.target.value)}
+                    onChange={(e) =>
+                      handleEditChange("username", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -325,13 +412,18 @@ const ProfileSettingsPage = () => {
 
               {/* Email */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Email address</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Email address
+                </label>
                 <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Mail
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
                   <input
                     type="email"
                     value={editForm.email}
-                    onChange={(e) => handleEditChange('email', e.target.value)}
+                    onChange={(e) => handleEditChange("email", e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -339,9 +431,14 @@ const ProfileSettingsPage = () => {
 
               {/* Gloro ID (Read-only) */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">GloroQ's ID</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  GloroQ's ID
+                </label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Lock
+                    size={18}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
                   <input
                     type="text"
                     value={editForm.gloroId}
@@ -353,14 +450,20 @@ const ProfileSettingsPage = () => {
 
               {/* Twitter Link */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Twitter link</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Twitter link
+                </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">𝕏</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+                    𝕏
+                  </span>
                   <input
                     type="text"
                     placeholder="Type or paste your link..."
                     value={editForm.twitterLink}
-                    onChange={(e) => handleEditChange('twitterLink', e.target.value)}
+                    onChange={(e) =>
+                      handleEditChange("twitterLink", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -368,7 +471,9 @@ const ProfileSettingsPage = () => {
 
               {/* Discord Link */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Discord link</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Discord link
+                </label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-purple-600 rounded flex items-center justify-center">
                     <span className="text-white text-xs font-bold">D</span>
@@ -377,7 +482,9 @@ const ProfileSettingsPage = () => {
                     type="text"
                     placeholder="Type or paste your link..."
                     value={editForm.discordLink}
-                    onChange={(e) => handleEditChange('discordLink', e.target.value)}
+                    onChange={(e) =>
+                      handleEditChange("discordLink", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -385,7 +492,9 @@ const ProfileSettingsPage = () => {
 
               {/* LinkedIn Link */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">LinkedIn link</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  LinkedIn link
+                </label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
                     <span className="text-white text-xs font-bold">in</span>
@@ -394,7 +503,9 @@ const ProfileSettingsPage = () => {
                     type="text"
                     placeholder="Type or paste your link..."
                     value={editForm.linkedinLink}
-                    onChange={(e) => handleEditChange('linkedinLink', e.target.value)}
+                    onChange={(e) =>
+                      handleEditChange("linkedinLink", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -402,7 +513,9 @@ const ProfileSettingsPage = () => {
 
               {/* Telegram Link */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Telegram link</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Telegram link
+                </label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-cyan-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-xs font-bold">T</span>
@@ -411,7 +524,9 @@ const ProfileSettingsPage = () => {
                     type="text"
                     placeholder="Type or paste your link..."
                     value={editForm.telegramLink}
-                    onChange={(e) => handleEditChange('telegramLink', e.target.value)}
+                    onChange={(e) =>
+                      handleEditChange("telegramLink", e.target.value)
+                    }
                     className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
@@ -419,11 +534,13 @@ const ProfileSettingsPage = () => {
 
               {/* Bio */}
               <div>
-                <label className="block text-white text-sm font-medium mb-2">Bio</label>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Bio
+                </label>
                 <textarea
                   placeholder="Write about you..."
                   value={editForm.bio}
-                  onChange={(e) => handleEditChange('bio', e.target.value)}
+                  onChange={(e) => handleEditChange("bio", e.target.value)}
                   rows={5}
                   className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 resize-none"
                 />
