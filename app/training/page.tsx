@@ -255,7 +255,7 @@ const TrainingSection = () => {
         {/* Hero Section */}
         <div className="w-full px-6 md:px-12 lg:px-24 pt-40 pb-12">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 orbitron">
               ENJOY YOUR <br />
               <span className="text-[#3b82f6]">TRAINING</span>
             </h1>

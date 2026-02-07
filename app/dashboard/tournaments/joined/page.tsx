@@ -55,7 +55,7 @@ const JoinedTournamentsPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-[#020818] via-[#0a1628] to-[#020818] p-8">
       <div className="max-w-7xl mx-auto">
         {/* Page Title */}
-        <h1 className="text-3xl font-bold text-white mb-8">Joined Tournaments</h1>
+        <h1 className="text-3xl font-bold text-white mb-8 orbitron">Joined Tournaments</h1>
 
         {/* Profile Warning */}
         <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-4 flex items-start gap-3 mb-8">
@@ -81,14 +81,14 @@ const JoinedTournamentsPage = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">Joined Tournaments</h2>
             <div className="relative w-80">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input
+              <Search className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              {/* <input
                 type="text"
                 placeholder=""
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
-              />
+              /> */}
             </div>
           </div>
 
@@ -103,7 +103,7 @@ const JoinedTournamentsPage = () => {
                   className="w-full h-56 rounded-xl bg-cover bg-center mb-3 border border-[#455872] group-hover:border-cyan-400/50 transition-all overflow-hidden"
                   style={{ backgroundImage: `url(${tournament.image})` }}
                 ></div>
-                <p className="text-white text-sm font-medium mb-3 line-clamp-2">
+                <p className="text-white text-sm font-medium mb-3 line-clamp-2 orbitron">
                   {tournament.name}
                 </p>
                 <button className="w-full px-4 py-2 bg-transparent border border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 rounded-lg text-sm font-semibold transition-all">

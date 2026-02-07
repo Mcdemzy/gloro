@@ -12,7 +12,7 @@ const CreatorLayout = ({ children }: CreatorLayoutProps) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a3d4a] via-[#0d4f5c] to-[#0a3d4a] flex flex-col">
+    <div className="min-h-screen bg-[#021E26] flex flex-col">
       <TopNav />
       
       <div className="flex pt-[73px] flex-1">

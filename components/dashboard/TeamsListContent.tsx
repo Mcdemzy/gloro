@@ -118,7 +118,7 @@ const TeamsListContent = () => {
 
       {/* Your Teams Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">Your Teams</h2>
+        <h2 className="text-2xl font-bold text-white orbitron">Your Teams</h2>
         <Link
           href="/dashboard/teams/create"
           className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
@@ -139,7 +139,7 @@ const TeamsListContent = () => {
               className="relative h-48 bg-cover bg-center"
               style={{ backgroundImage: `url(${team.image})` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-transparent"></div>
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-transparent"></div>
               <div className="absolute top-4 right-4 flex gap-2">
                 <button
                   onClick={(e) => {
@@ -161,12 +161,12 @@ const TeamsListContent = () => {
                 >
                   <Trash2 size={18} className="text-white" />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <div className="p-6">
               <h3 className="text-xl font-bold text-white mb-2">{team.name}</h3>
-              <div className="flex items-center gap-3 mb-4">
+              {/* <div className="flex items-center gap-3 mb-4">
                 <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-xs font-semibold flex items-center gap-1">
                   <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
                   Currently in {team.currentTournaments} Tournaments
@@ -174,7 +174,7 @@ const TeamsListContent = () => {
               </div>
               <p className="text-gray-400 text-sm mb-6 line-clamp-2">
                 {team.description}
-              </p>
+              </p> */}
 
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2 text-gray-400">
@@ -182,7 +182,7 @@ const TeamsListContent = () => {
                   <span className="text-sm">{team.memberCount} members</span>
                 </div>
                 <div className="flex gap-2">
-                  <button
+                  {/* <button
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -192,17 +192,17 @@ const TeamsListContent = () => {
                   >
                     <Edit size={16} />
                     Edit
-                  </button>
+                  </button> */}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       setShowShareModal(true);
                     }}
-                    className="px-4 py-2 bg-white/5 text-white hover:bg-white/10 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
+                    className="px-4 py-2 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
                   >
                     <Share2 size={16} />
-                    Share
+                    {/* Share */}
                   </button>
                 </div>
               </div>

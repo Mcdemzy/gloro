@@ -92,7 +92,7 @@ const ProfileSettingsPage = () => {
 
             {/* Profile Info */}
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">
+              <h2 className="text-3xl font-bold text-white mb-2 orbitron">
                 Raymond Thomas
               </h2>
               <div className="flex items-center gap-3 mb-3">

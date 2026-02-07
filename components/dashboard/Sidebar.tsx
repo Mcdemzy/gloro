@@ -86,7 +86,7 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`fixed left-0 top-[73px] h-[calc(100vh-73px)] bg-[#1a1d2e] border-r border-purple-500/20 flex flex-col py-8 z-50 transition-all duration-300 ${
+      className={`fixed left-0 top-40 h-[calc(100vh-73px)] bg-[#1a1d2e] border-r border-purple-500/20 flex flex-col py-8 z-50 transition-all duration-300 ${
         sidebarExpanded ? "w-72" : "w-20"
       }`}
       onMouseEnter={() => setSidebarExpanded(true)}
