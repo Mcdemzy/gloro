@@ -38,7 +38,7 @@ export default function TeamDetailView() {
 
   return (
     <div className="min-h-screen bg-[#0a1f2e] p-8">
-      <div className="space-y-6 max-w-6xl mx-auto">
+      <div className="space-y-6 max-w-6xl mx-auto orbitron">
         {/* Tournament Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-white uppercase tracking-wider mb-2">

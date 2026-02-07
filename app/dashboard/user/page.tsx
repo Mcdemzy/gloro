@@ -185,10 +185,10 @@ const DashboardPage = () => {
           <div className="max-w-7xl mx-auto">
             {/* Profile Header */}
             <div className="bg-[#0a1628] border border-[#455872] rounded-2xl p-8 mb-8">
-              <div className="flex items-center justify-between mb-6">
+              {/* <div className="flex items-center justify-between mb-6">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-3xl font-bold text-white">Raymond Thomas</h1>
+                    <h1 className="text-3xl font-bold text-white orbitron">Raymond Thomas</h1>
                     <span className="text-gray-400">• Player_raytop635</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -203,7 +203,7 @@ const DashboardPage = () => {
                   <Share2 size={18} />
                   Switch to Creator's Dashboard
                 </button>
-              </div>
+              </div> */}
 
               {/* Profile Warning */}
               <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-4 flex items-start gap-3">

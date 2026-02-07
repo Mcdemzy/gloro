@@ -79,25 +79,37 @@ const OverviewContent = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">Overview</h1>
-          <p className="text-cyan-300/70">
+          <h1 className="text-4xl font-bold text-white mb-2 orbitron">
+            Overview
+          </h1>
+          {/* <p className="text-cyan-300/70">
             Manage your tournaments and track performance
-          </p>
+          </p> */}
         </div>
         <Link
           href="/dashboard"
-          className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-cyan-500/50"
+          className="px-6 py-3 bg-[#063745] text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-cyan-500/50"
         >
           Switch to User's Dashboard
         </Link>
       </div>
 
       {/* Stats Card */}
-      <div className="bg-gradient-to-br from-[#0c3540]/60 to-[#0a2d36]/60 backdrop-blur-md border border-cyan-500/20 rounded-2xl p-6 mb-8 shadow-xl">
-        <p className="text-cyan-300/70 text-sm mb-2">
-          Total Tournaments Created
-        </p>
-        <p className="text-5xl font-bold text-white">12</p>
+      <div className="flex justify-between items-center">
+        <div className="w-fit bg-gradient-to-br from-[#0c3540]/60 to-[#0a2d36]/60 backdrop-blur-md border border-cyan-500/20 rounded-2xl p-6 mb-8 shadow-xl">
+          <p className="text-cyan-300/70 text-sm mb-2">
+            Total Tournaments Created
+          </p>
+          <p className="text-5xl font-bold text-white">12</p>
+        </div>
+
+        <Link
+          href="/creator/host/tournament"
+          className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2 w-fit h-fit"
+        >
+          <Plus size={20} />
+          Create New Tournament
+        </Link>
       </div>
 
       {/* My Tournaments Section */}
@@ -109,13 +121,6 @@ const OverviewContent = () => {
             className="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold"
           >
             See all
-          </Link>
-          <Link
-            href="/creator/host/tournament"
-            className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2"
-          >
-            <Plus size={20} />
-            Create New Tournament
           </Link>
         </div>
       </div>
@@ -137,7 +142,7 @@ const OverviewContent = () => {
             </div>
 
             <div className="p-5 space-y-3">
-              <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+              <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors orbitron">
                 {tournament.title}
               </h3>
 

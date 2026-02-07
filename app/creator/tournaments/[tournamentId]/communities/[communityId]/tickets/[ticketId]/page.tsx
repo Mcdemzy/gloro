@@ -72,7 +72,7 @@ export default function TicketDetailsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white uppercase tracking-wider mb-2">
+          <h1 className="text-2xl font-bold text-white uppercase tracking-wider mb-2 orbitron">
             {tournamentInfo.title} | Communities
           </h1>
           <p className="text-gray-400 text-sm">{tournamentInfo.date}</p>

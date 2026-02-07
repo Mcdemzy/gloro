@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, Users, ArrowRight, TrendingUp } from "lucide-react";
+import { Calendar, Users, ArrowRight } from "lucide-react";
 
 const LatestCompetitions = () => {
   const competitions = [
@@ -18,11 +18,11 @@ const LatestCompetitions = () => {
       id: 2,
       title: "Competition Name",
       date: "20 Nov 2024",
-      organizer: "Creator's Creator Name",
+      organizer: "(Creator Icon) Creator's Creator Name",
       games: "PUBG • CODM • Freefire",
       image:
         "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
-      status: "Upcoming",
+      status: "Upcoming 🔥",
       statusColor: "bg-purple-500",
     },
     {
@@ -33,7 +33,7 @@ const LatestCompetitions = () => {
       games: "PUBG • CODM • Freefire",
       image:
         "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&h=600&fit=crop",
-      status: "Upcoming",
+      status: "Upcoming 🔥",
       statusColor: "bg-purple-500",
     },
     {
@@ -44,7 +44,7 @@ const LatestCompetitions = () => {
       games: "PUBG • CODM • Freefire",
       image:
         "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop",
-      status: "Upcoming",
+      status: "Upcoming 🔥",
       statusColor: "bg-purple-500",
     },
   ];
@@ -54,7 +54,7 @@ const LatestCompetitions = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
-          <h3 className="text-3xl font-bold text-white">Latest Tournaments</h3>
+          <h3 className="text-3xl font-bold text-white orbitron">Latest Tournaments</h3>
           <button className="text-cyan-400 hover:text-cyan-300 flex items-center gap-2 group transition-colors">
             See all
             <ArrowRight
@@ -69,53 +69,62 @@ const LatestCompetitions = () => {
           {competitions.map((comp) => (
             <div
               key={comp.id}
-              className="group bg-[#0a1628] border border-[#455872] rounded-2xl overflow-hidden hover:border-cyan-400/50 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300"
+              className="group bg-gradient-to-b from-[#0a1f3d]/40 to-[#051225]/60 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 backdrop-blur-sm"
+              style={{
+                border: "1px solid rgba(0, 198, 255, 0.3)",
+                boxShadow: "0 0 30px rgba(0, 198, 255, 0.1)",
+              }}
             >
-              {/* Image Container */}
-              <div className="relative overflow-hidden h-64">
-                <div
-                  className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                  style={{
-                    backgroundImage: `url(${comp.image})`,
-                    backgroundPosition: "center",
-                  }}
-                >
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-transparent"></div>
-                </div>
-
-                {/* Status badge */}
-                <div className="absolute top-4 left-4">
-                  <span
-                    className={`${comp.statusColor} text-white text-sm px-4 py-1.5 rounded-full font-semibold flex items-center gap-2`}
-                  >
-                    <TrendingUp size={14} />
-                    {comp.status}
-                  </span>
-                </div>
+              {/* Image - Full width with curved corners */}
+              <div className="relative overflow-hidden">
+                <img
+                  src={comp.image}
+                  alt={comp.title}
+                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                {/* Gradient overlay at bottom of image */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#051225] via-transparent to-transparent opacity-60"></div>
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-4">
-                <h2 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+              <div className="p-6 space-y-3">
+                {/* Title */}
+                <h2 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
                   {comp.title}
                 </h2>
 
-                <div className="space-y-2 text-gray-400">
-                  <p className="flex items-center gap-2 text-sm">
-                    <Calendar size={16} className="text-cyan-400" />
-                    {comp.date}
-                  </p>
-                  <p className="flex items-center gap-2 text-sm">
-                    <Users size={16} className="text-cyan-400" />
-                    {comp.organizer}
-                  </p>
-                  <p className="text-sm text-gray-500">{comp.games}</p>
+                {/* Date */}
+                <p className="flex items-center gap-2 text-cyan-400 text-sm font-medium">
+                  <Calendar size={16} />
+                  {comp.date}
+                </p>
+
+                {/* Organizer */}
+                <p className="flex items-center gap-2 text-gray-400 text-sm">
+                  <Users size={16} />
+                  {comp.organizer}
+                </p>
+
+                {/* Games */}
+                <p className="text-sm text-gray-500">{comp.games}</p>
+
+                {/* Status Badge */}
+                <div className="pt-2">
+                  <span
+                    className={`${comp.statusColor} text-white text-xs px-3 py-1 rounded-full font-medium inline-block`}
+                  >
+                    {comp.status}
+                  </span>
                 </div>
 
-                {/* Buttons */}
-                <div className="flex gap-3 pt-2">
-                  <button className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105">
+                {/* Register Button */}
+                <div className="pt-2">
+                  <button
+                    className="w-full text-cyan-400 font-semibold py-3 rounded-xl transition-all duration-300 hover:bg-cyan-400/10 border border-cyan-400/50 hover:border-cyan-400"
+                    style={{
+                      background: "rgba(0, 198, 255, 0.05)",
+                    }}
+                  >
                     Register Now
                   </button>
                 </div>

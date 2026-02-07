@@ -159,7 +159,7 @@ export default function CommunitiesManagement() {
         <div className="space-y-6 max-w-6xl mx-auto">
           {/* Tournament Header */}
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-white uppercase tracking-wider mb-2">
+            <h1 className="text-2xl font-bold text-white uppercase tracking-wider mb-2 orbitron">
               {tournamentInfo.title} | Communities
             </h1>
             <p className="text-gray-400">{tournamentInfo.date}</p>

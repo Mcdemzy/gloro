@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, User, LogIn } from "lucide-react";
+import signupBG from "@/assets/images/signupBG.png";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +18,7 @@ const SignupPage = () => {
     confirmPassword: ""
   });
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
   };
@@ -31,34 +32,42 @@ const SignupPage = () => {
       {/* Main Signup Container */}
       <section className="w-full max-w-7xl flex flex-col lg:flex-row rounded-3xl overflow-hidden shadow-2xl">
         {/* Left Side - Image Section */}
-        <div className="lg:w-1/2 relative bg-gradient-to-br from-purple-600 via-purple-700 to-blue-700 p-12 flex flex-col justify-between min-h-[600px]">
-          {/* Background gaming image would go here */}
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/30 via-purple-600/50 to-blue-600/40"></div>
+        <div 
+          className="lg:w-1/2 relative min-h-[600px] p-12 flex flex-col justify-between"
+          style={{
+            backgroundImage: `url(${signupBG.src})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-blue-900/60 to-black/50"></div>
           
           <div className="relative z-10">
-            <h1 className="text-cyan-400 text-5xl font-bold mb-8">Gloro</h1>
-            <h2 className="text-white text-4xl font-bold mb-4">Welcome to Gloro Gaming platform</h2>
-            <p className="text-white/90 text-lg">
+            <h1 className="text-cyan-400 text-5xl font-bold mb-8 orbitron">Gloro</h1>
+            <h2 className="text-white text-2xl font-bold mb-4 orbitron text-center">Welcome to Gloro Gaming platform</h2>
+            <p className="text-white text-lg mt-40 text-center p-4 rounded-xl">
               This is where you can sign in and sign up, to get more information and participate in upcoming Tournament
             </p>
           </div>
 
           {/* Decorative elements */}
           <div className="relative z-10 flex items-end justify-center">
-            <div className="w-full h-64 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div className="w-full h-64 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
         </div>
 
         {/* Right Side - Signup Form */}
         <div className="lg:w-1/2 bg-[#0a1628] p-8 md:p-12 flex flex-col">
           {/* Tab Switcher */}
-          <div className="flex bg-white/5 rounded-2xl p-1 mb-8 w-full max-w-md mx-auto">
+          <div className="flex bg-white rounded-2xl p-1 mb-8 w-full max-w-md mx-auto">
             <button
               onClick={() => setActiveTab("login")}
               className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all ${
                 activeTab === "login"
-                  ? "bg-white text-gray-900 shadow-lg"
-                  : "text-white/70 hover:text-white"
+                  ? "bg-cyan-500 text-white shadow-lg"
+                  : "text-black"
               }`}
             >
               <LogIn className="inline mr-2" size={18} />
@@ -69,7 +78,7 @@ const SignupPage = () => {
               className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all ${
                 activeTab === "signup"
                   ? "bg-cyan-500 text-white shadow-lg"
-                  : "text-white/70 hover:text-white"
+                  : "text-black"
               }`}
             >
               <User className="inline mr-2" size={18} />

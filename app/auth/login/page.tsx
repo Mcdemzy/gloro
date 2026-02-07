@@ -1,6 +1,8 @@
 "use client";
+
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, User, LogIn } from "lucide-react";
+import signupBG from "@/assets/images/signupBG.png";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,18 +14,24 @@ const LoginPage = () => {
       {/* Main Login Container */}
       <section className="w-full max-w-7xl flex flex-col lg:flex-row rounded-3xl overflow-hidden shadow-2xl">
         {/* Left Side - Image Section */}
-        <div className="lg:w-1/2 relative bg-gradient-to-br from-purple-600 via-purple-700 to-blue-700 p-12 flex flex-col justify-between min-h-[500px]">
-          {/* Background gaming image would go here */}
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/30 via-purple-600/50 to-blue-600/40"></div>
+        <div 
+          className="lg:w-1/2 relative min-h-[600px] p-12 flex flex-col justify-between"
+          style={{
+            backgroundImage: `url(${signupBG.src})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-blue-900/60 to-black/50"></div>
 
           <div className="relative z-10">
-            <h1 className="orbitron text-cyan-400 text-5xl font-bold mb-8">
-              Gloro
-            </h1>
-            <h2 className="text-white text-4xl font-bold mb-4">
+            <h1 className="text-cyan-400 text-5xl font-bold mb-8 orbitron">Gloro</h1>
+            <h2 className="text-white text-2xl font-bold mb-4 orbitron text-center">
               Welcome to Gloro Gaming platform
             </h2>
-            <p className="text-white/90 text-lg">
+            <p className="text-white text-lg mt-40 text-center  p-4 rounded-xl">
               This is where you can sign in and sign up, to get more information
               and participate in upcoming Tournament
             </p>
@@ -31,30 +39,31 @@ const LoginPage = () => {
 
           {/* Decorative elements */}
           <div className="relative z-10 flex items-end justify-center">
-            <div className="w-full h-64 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div className="w-full h-64 bg-gradient-to-t from-black/50 to-transparent"></div>
           </div>
         </div>
 
         {/* Right Side - Login Form */}
         <div className="lg:w-1/2 bg-[#0a1628] p-8 md:p-12 flex flex-col">
-          {/* Tab Switcher */}
-          <div className="flex bg-white/5 rounded-2xl p-1 mb-8 w-full max-w-md mx-auto">
+          {/* Tab Switcher - Updated to match signup page */}
+          <div className="flex bg-white rounded-2xl p-1 mb-8 w-full max-w-md mx-auto">
             <button
               onClick={() => setActiveTab("login")}
               className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all ${
                 activeTab === "login"
                   ? "bg-cyan-500 text-white shadow-lg"
-                  : "text-white/70 hover:text-white"
+                  : "text-black"
               }`}
             >
+              <LogIn className="inline mr-2" size={18} />
               Login
             </button>
             <button
               onClick={() => setActiveTab("signup")}
               className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all ${
                 activeTab === "signup"
-                  ? "bg-white text-gray-900 shadow-lg"
-                  : "text-white/70 hover:text-white"
+                  ? "bg-cyan-500 text-white shadow-lg"
+                  : "text-black"
               }`}
             >
               <User className="inline mr-2" size={18} />
@@ -67,7 +76,7 @@ const LoginPage = () => {
               Welcome Back!
             </h3>
 
-            <form className="space-y-6">
+            <form className="space-y-5">
               {/* Email/Username Input */}
               <div>
                 <label className="text-white/90 text-sm mb-2 block">
@@ -81,7 +90,7 @@ const LoginPage = () => {
                   <input
                     type="text"
                     placeholder="Enter your email or username"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 focus:bg-white/10 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 focus:bg-white/10 transition-all"
                   />
                 </div>
               </div>
@@ -99,7 +108,7 @@ const LoginPage = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 focus:bg-white/10 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-12 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500 focus:bg-white/10 transition-all"
                   />
                   <button
                     type="button"
@@ -126,33 +135,33 @@ const LoginPage = () => {
                 </label>
                 <a
                   href="#"
-                  className="text-white/80 hover:text-cyan-400 text-sm transition-colors"
+                  className="text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
                 >
                   Forgot your password?
                 </a>
               </div>
 
-              {/* Sign In Link */}
+              {/* Login Button */}
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-3 rounded-xl transition-all shadow-lg hover:shadow-purple-500/50"
+              >
+                Login
+              </button>
+
+              {/* Sign Up Link - Updated positioning and styling */}
               <p className="text-white/70 text-sm text-center">
                 If you do not have an account, create an account by clicking{" "}
                 <a
                   href="#"
                   className="text-cyan-400 hover:text-cyan-300 font-semibold"
                 >
-                  Sign in
+                  Sign up
                 </a>
               </p>
 
-              {/* Login Button */}
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold py-4 rounded-xl transition-all shadow-lg hover:shadow-purple-500/50"
-              >
-                Login
-              </button>
-
               {/* Divider */}
-              <div className="flex items-center gap-4 my-6">
+              <div className="flex items-center gap-4 my-4">
                 <div className="flex-1 h-px bg-white/10"></div>
                 <span className="text-white/50 text-sm">or</span>
                 <div className="flex-1 h-px bg-white/10"></div>
@@ -161,7 +170,7 @@ const LoginPage = () => {
               {/* Google Sign In */}
               <button
                 type="button"
-                className="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-3"
+                className="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-3"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path

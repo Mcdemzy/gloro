@@ -137,7 +137,7 @@ const TournamentOverviewPage = () => {
               <div className="p-3 bg-blue-500/20 rounded-lg">
                 <Settings className="text-blue-400" size={32} />
               </div>
-              <h2 className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors">
+              <h2 className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors orbitron">
                 Managers
               </h2>
             </div>
@@ -159,7 +159,7 @@ const TournamentOverviewPage = () => {
               <div className="p-3 bg-teal-500/20 rounded-lg">
                 <Eye className="text-teal-400" size={32} />
               </div>
-              <h2 className="text-2xl font-bold text-white group-hover:text-teal-300 transition-colors">
+              <h2 className="text-2xl font-bold text-white group-hover:text-teal-300 transition-colors orbitron">
                 Preview
               </h2>
             </div>
@@ -176,13 +176,13 @@ const TournamentOverviewPage = () => {
           {/* Scheduling Section */}
           <div
             onClick={() => handleSectionClick("scheduling")}
-            className="w-1/2 bg-gradient-to-br from-orange-900/40 to-orange-950/40 backdrop-blur-md border border-orange-500/30 rounded-2xl p-8 hover:border-orange-400/50 transition-all cursor-pointer group md:col-span-2"
+            className="w-1/2 bg-gradient-to-br from-orange-900/40 to-orange-950/40 backdrop-blur-md border border-orange-500/30 rounded-2xl p-8 hover:border-orange-400/50 transition-all cursor-pointer group md:col-span-2 "
           >
             <div className="flex items-center gap-4 mb-4">
               <div className="p-3 bg-orange-500/20 rounded-lg">
                 <Calendar className="text-orange-400" size={32} />
               </div>
-              <h2 className="text-2xl font-bold text-white group-hover:text-orange-300 transition-colors">
+              <h2 className="text-2xl font-bold text-white group-hover:text-orange-300 transition-colors orbitron">
                 Scheduling
               </h2>
             </div>

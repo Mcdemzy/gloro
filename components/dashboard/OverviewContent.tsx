@@ -99,24 +99,24 @@ const OverviewContent = () => {
         <div className="lg:col-span-2">
           <div className="bg-[#0a1628] border border-[#455872] rounded-2xl p-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-white orbitron">
                 Joined Tournaments
               </h2>
-              <button className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors">
+              <button className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors orbitron">
                 See all
               </button>
             </div>
             <div className="grid grid-cols-2 gap-6">
               {joinedTournaments.map((tournament) => (
-                <div key={tournament.id} className="group cursor-pointer">
+                <div key={tournament.id} className="group cursor-pointer bg-[#65656533] p-4 border border-[#455872] rounded-sm">
                   <div
                     className="w-full h-48 rounded-xl bg-cover bg-center mb-3 border border-[#455872] group-hover:border-cyan-400/50 transition-all"
                     style={{ backgroundImage: `url(${tournament.image})` }}
                   ></div>
-                  <p className="text-white text-sm font-medium mb-3 line-clamp-2">
+                  <p className="text-white text-sm font-medium mb-3 line-clamp-2 orbitron">
                     {tournament.title}
                   </p>
-                  <button className="w-full px-4 py-2 bg-transparent border border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 rounded-lg text-sm font-semibold transition-all">
+                  <button className="w-full px-4 py-2 border border-[#71D4F7  ] text-cyan-400 hover:bg-cyan-400/10 rounded-xs text-sm font-semibold transition-all bg-[#030D0F]">
                     View
                   </button>
                 </div>
@@ -126,13 +126,7 @@ const OverviewContent = () => {
         </div>
 
         <div className="lg:col-span-1">
-          <div className="bg-[#0a1628] border border-[#455872] rounded-2xl p-6 mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">My teams</h2>
-              <button className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors">
-                See all
-              </button>
-            </div>
+          <div className="bg-[#151026] border border-[#5D5264] rounded-2xl p-6 mb-8">
             <button className="w-full mb-6 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50">
               <Link
                 href="/dashboard/teams/create"
@@ -141,11 +135,18 @@ const OverviewContent = () => {
                 Create new team
               </Link>{" "}
             </button>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white orbitron">My teams</h2>
+              <button className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors orbitron">
+                See all
+              </button>
+            </div>
+            
             <div className="space-y-4">
               {teams.map((team) => (
                 <div
                   key={team.id}
-                  className="flex items-center justify-between p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300"
+                  className="flex items-center justify-between p-4 border-b border-[#656565]  hover:bg-white/10 transition-all duration-300"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -170,12 +171,12 @@ const OverviewContent = () => {
             </div>
           </div>
 
-          <div className="bg-[#0a1628] border border-[#455872] rounded-2xl p-6">
+          <div className="bg-[#151026] border border-[#455872] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-white orbitron">
                 Hosted Competitions
               </h2>
-              <button className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors">
+              <button className="orbitron text-cyan-400 hover:text-cyan-300 text-sm font-semibold transition-colors">
                 See all
               </button>
             </div>
@@ -183,7 +184,7 @@ const OverviewContent = () => {
               {hostedCompetitions.map((comp) => (
                 <div
                   key={comp.id}
-                  className="flex items-center gap-3 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                  className="flex items-center gap-3 p-3 border-b border-[#656565] hover:bg-white/10 transition-all duration-300 cursor-pointer"
                 >
                   <div
                     className="w-12 h-12 rounded-lg bg-cover bg-center flex-shrink-0"
