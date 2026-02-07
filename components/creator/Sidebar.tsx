@@ -108,7 +108,7 @@ const Sidebar = ({ sidebarExpanded, setSidebarExpanded }: SidebarProps) => {
             >
               <Icon size={22} className="flex-shrink-0" />
               {sidebarExpanded && (
-                <span className="text-sm font-medium whitespace-nowrap">
+                <span className="text-sm font-medium whitespace-nowrap orbitron">
                   {item.label}
                 </span>
               )}

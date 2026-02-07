@@ -114,7 +114,7 @@ const TournamentManagersPage = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-4 tracking-wide">
+          <h1 className="text-2xl font-bold text-white mb-4 tracking-wide ornbitron">
             FIFA GLOBAL CUP COLOSSAL GAMES
           </h1>
           <p className="text-gray-400 text-sm">

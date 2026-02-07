@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Sidebar from "@/components/creator/Sidebar";
 import TopNav from "@/components/creator/TopNav";
 import Footer from "@/components/creator/Footer";
+import CreatorNavbar from "@/components/creator/CreatorNavbar";
 
 interface CreatorLayoutProps {
   children: React.ReactNode;
@@ -13,9 +14,10 @@ const CreatorLayout = ({ children }: CreatorLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-[#021E26] flex flex-col">
-      <TopNav />
+      {/* <TopNav /> */}
+      <CreatorNavbar/>
       
-      <div className="flex pt-[73px] flex-1">
+      <div className="flex pt73px] flex-1">
         <Sidebar 
           sidebarExpanded={sidebarExpanded}
           setSidebarExpanded={setSidebarExpanded}
