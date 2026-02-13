@@ -1,263 +1,331 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Menu, X, ChevronDown } from "lucide-react";
 
 const LPNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect for navbar background
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
 
   return (
-    <nav
-      className="relative mx-4 lg:mx-auto my-8 max-w-[1459px] px-8 sm:px-12 lg:px-[69px] py-6"
-      style={{
-        background:
-          "linear-gradient(270deg, rgba(149, 24, 211, 0.05) 0%, rgba(74, 97, 221, 0.05) 50%, rgba(0, 170, 231, 0.05) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))",
-        border: "0.2px solid rgba(175, 192, 187, 0.7)",
-        boxShadow: "0px 4px 32px 0px rgba(0, 0, 0, 0.3)",
-        borderRadius: "100px",
-      }}
-    >
-      <div className="w-full">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-tight">
-              Gloro
-            </h1>
-          </div>
+    <>
+      {/* Fixed Navbar */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? "py-2" : "py-4"
+        }`}
+      >
+        <div className="relative mx-4 lg:mx-auto max-w-[1459px] px-6 sm:px-10 lg:px-[69px]">
+          {/* Blur Background Container - Increased height */}
+          <div
+            className={`absolute inset-0 transition-all duration-300 rounded-2xl lg:rounded-full`}
+            style={{
+              background: scrolled
+                ? "linear-gradient(270deg, rgba(149, 24, 211, 0.2) 0%, rgba(74, 97, 221, 0.2) 50%, rgba(0, 170, 231, 0.2) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1))"
+                : "linear-gradient(270deg, rgba(149, 24, 211, 0.1) 0%, rgba(74, 97, 221, 0.1) 50%, rgba(0, 170, 231, 0.1) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))",
+              border: "0.5px solid rgba(175, 192, 187, 0.4)",
+              boxShadow: scrolled 
+                ? "0px 8px 32px 0px rgba(0, 0, 0, 0.5)" 
+                : "0px 4px 32px 0px rgba(0, 0, 0, 0.3)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+            }}
+          ></div>
 
-          {/* Search Bar - Hidden on mobile */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
+          {/* Navbar Content - Increased padding for more height */}
+          <div className="relative w-full py-3 lg:py-4">
+            <div className="flex items-center justify-between">
+              {/* Logo - Slightly smaller on mobile */}
+              <div className="flex-shrink-0">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-tight orbitron">
+                  Gloroq
+                </h1>
               </div>
-              <input
-                type="text"
-                className="block w-full pl-12 pr-4 py-3 border border-gray-700/30 rounded-xl bg-white/5  text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all"
-                placeholder="Search news, games & Tournaments"
-              />
+
+              {/* Desktop Search Bar - Hidden on mobile */}
+              <div className="hidden lg:flex flex-1 max-w-md mx-8">
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    className="block w-full pl-12 pr-4 py-3.5 border border-gray-700/30 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all"
+                    placeholder="Search news, games & Tournaments"
+                  />
+                </div>
+              </div>
+
+              {/* Desktop Navigation Links */}
+              <div className="hidden lg:flex items-center space-x-2">
+                <a
+                  href="#home"
+                  className="text-cyan-400 hover:text-cyan-300 px-4 py-2.5 text-base font-medium transition-colors rounded-lg"
+                >
+                  Home
+                </a>
+                <a
+                  href="#tournaments"
+                  className="text-white hover:text-cyan-400 px-4 py-2.5 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
+                >
+                  Tournaments
+                </a>
+                <a
+                  href="#training"
+                  className="text-white hover:text-cyan-400 px-4 py-2.5 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
+                >
+                  Training
+                </a>
+
+                {/* Categories Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                    className="text-white hover:text-cyan-400 px-4 py-2.5 text-base font-medium transition-colors flex items-center space-x-1 rounded-lg hover:bg-white/5"
+                  >
+                    <span>Categories</span>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        isCategoriesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isCategoriesOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsCategoriesOpen(false)}
+                      ></div>
+                      <div
+                        className="absolute right-0 mt-2 w-56 rounded-xl shadow-xl border py-2 z-20"
+                        style={{
+                          background: "rgba(10, 10, 15, 0.95)",
+                          border: "0.5px solid rgba(175, 192, 187, 0.3)",
+                          backdropFilter: "blur(12px)",
+                          WebkitBackdropFilter: "blur(12px)",
+                        }}
+                      >
+                        <a
+                          href="#fps"
+                          className="block px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                        >
+                          FPS Games
+                        </a>
+                        <a
+                          href="#moba"
+                          className="block px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                        >
+                          MOBA
+                        </a>
+                        <a
+                          href="#battle-royale"
+                          className="block px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                        >
+                          Battle Royale
+                        </a>
+                        <a
+                          href="#sports"
+                          className="block px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                        >
+                          Sports
+                        </a>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Desktop Register Button */}
+                <div
+                  className="ml-2 rounded-full p-[1.5px]"
+                  style={{
+                    background:
+                      "linear-gradient(227.37deg, #6FCCA5 -19.74%, #00C6FF 17.4%, #A218D4 123.81%)",
+                  }}
+                >
+                  <button className="px-6 py-2.5 rounded-full bg-black/50 text-white font-medium text-base hover:bg-black/70 transition-all duration-300 whitespace-nowrap">
+                    Register Now
+                  </button>
+                </div>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden p-2.5 rounded-lg text-white hover:text-cyan-400 hover:bg-white/5 focus:outline-none transition-colors"
+              >
+                <Menu className="h-6 w-6" />
+              </button>
             </div>
           </div>
+        </div>
+      </nav>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center space-x-2">
-            <a
-              href="#home"
-              className="text-cyan-400 hover:text-cyan-300 px-4 py-2 text-base font-medium transition-colors rounded-lg"
-            >
-              Home
-            </a>
-            <a
-              href="#tournaments"
-              className="text-white hover:text-cyan-400 px-4 py-2 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
-            >
-              Tournaments
-            </a>
-            <a
-              href="#training"
-              className="text-white hover:text-cyan-400 px-4 py-2 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
-            >
-              Training
-            </a>
-
-            {/* Categories Dropdown */}
-            <div className="relative">
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          {/* Sidebar */}
+          <div
+            className="fixed right-0 top-0 h-full w-[320px] sm:w-[380px] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "rgba(10, 10, 15, 0.98)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              borderLeft: "1px solid rgba(175, 192, 187, 0.15)",
+              boxShadow: "-8px 0 32px 0 rgba(0, 0, 0, 0.6)",
+            }}
+          >
+            {/* Sidebar Header */}
+            <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent orbitron">
+                Gloroq
+              </h2>
               <button
-                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                className="text-white hover:text-cyan-400 px-4 py-2 text-base font-medium transition-colors flex items-center space-x-1 rounded-lg hover:bg-white/5"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg text-white hover:text-cyan-400 hover:bg-white/5 transition-colors"
               >
-                <span>Categories</span>
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-200 ${isCategoriesOpen ? "rotate-180" : ""}`}
-                />
+                <X className="h-6 w-6" />
               </button>
+            </div>
 
-              {isCategoriesOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsCategoriesOpen(false)}
-                  ></div>
-                  <div
-                    className="absolute right-0 mt-2 w-56 rounded-xl shadow-xl border py-2 z-20 backdrop-blur-md"
-                    style={{
-                      background:
-                        "linear-gradient(270deg, rgba(149, 24, 211, 0.1) 0%, rgba(74, 97, 221, 0.1) 50%, rgba(0, 170, 231, 0.1) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))",
-                      border: "0.2px solid rgba(175, 192, 187, 0.5)",
-                    }}
-                  >
+            {/* Sidebar Content */}
+            <div className="p-6 space-y-6">
+              {/* Mobile Search Bar - Now in sidebar */}
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  className="block w-full pl-12 pr-4 py-4 border border-gray-700/30 rounded-xl bg-white/5 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all"
+                  placeholder="Search news, games & Tournaments"
+                />
+              </div>
+
+              {/* Navigation Links */}
+              <div className="space-y-1">
+                <a
+                  href="#home"
+                  className="block text-cyan-400 hover:text-cyan-300 px-4 py-3.5 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Home
+                </a>
+                <a
+                  href="#tournaments"
+                  className="block text-white hover:text-cyan-400 px-4 py-3.5 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Tournaments
+                </a>
+                <a
+                  href="#training"
+                  className="block text-white hover:text-cyan-400 px-4 py-3.5 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Training
+                </a>
+              </div>
+
+              {/* Mobile Categories */}
+              <div>
+                <button
+                  onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                  className="w-full flex items-center justify-between text-white hover:text-cyan-400 px-4 py-3.5 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
+                >
+                  <span>Categories</span>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform duration-200 ${
+                      isCategoriesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {isCategoriesOpen && (
+                  <div className="mt-2 ml-4 space-y-1">
                     <a
                       href="#fps"
-                      className="block px-4 py-2.5 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                      className="block text-gray-400 hover:text-cyan-400 px-4 py-3 text-sm transition-colors rounded-lg hover:bg-white/5"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       FPS Games
                     </a>
                     <a
                       href="#moba"
-                      className="block px-4 py-2.5 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                      className="block text-gray-400 hover:text-cyan-400 px-4 py-3 text-sm transition-colors rounded-lg hover:bg-white/5"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       MOBA
                     </a>
                     <a
                       href="#battle-royale"
-                      className="block px-4 py-2.5 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                      className="block text-gray-400 hover:text-cyan-400 px-4 py-3 text-sm transition-colors rounded-lg hover:bg-white/5"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Battle Royale
                     </a>
                     <a
                       href="#sports"
-                      className="block px-4 py-2.5 text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                      className="block text-gray-400 hover:text-cyan-400 px-4 py-3 text-sm transition-colors rounded-lg hover:bg-white/5"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Sports
                     </a>
                   </div>
-                </>
-              )}
-            </div>
-          </div>
+                )}
+              </div>
 
-          {/* Right Side - Register Button */}
-          <div className="flex items-center space-x-3">
-            {/* Register Now Button with Gradient Border */}
-            <div
-              className="hidden sm:block rounded-3xl p-[1.5px]"
-              style={{
-                background:
-                  "linear-gradient(227.37deg, #6FCCA5 -19.74%, #00C6FF 17.4%, #A218D4 123.81%)",
-                  backgroundBlendMode:"multiply"
-              }}
-            >
-              <button className="px-6 py-3.5 rounded-[24px] text-white font-medium text-base hover:bg-[#151515] transition-all duration-300 whitespace-nowrap">
-                Register Now
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-white hover:text-cyan-400 hover:bg-white/5 focus:outline-none transition-colors ml-2"
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Search Bar */}
-        <div className="lg:hidden mt-4">
-          <div className="relative w-full">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              className="block w-full pl-12 pr-4 py-3 border border-gray-700/30 rounded-xl bg-white/5 backdrop-blur-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all"
-              placeholder="Search news, games & Tournaments"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden mt-4 pt-4 border-t border-white/10">
-          <div className="space-y-2">
-            <a
-              href="#home"
-              className="block text-cyan-400 hover:text-cyan-300 px-4 py-3 text-base font-medium transition-colors rounded-lg"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Home
-            </a>
-            <a
-              href="#tournaments"
-              className="block text-white hover:text-cyan-400 px-4 py-3 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Tournaments
-            </a>
-            <a
-              href="#training"
-              className="block text-white hover:text-cyan-400 px-4 py-3 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Training
-            </a>
-
-            {/* Mobile Categories */}
-            <div>
-              <button
-                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                className="w-full flex items-center justify-between text-white hover:text-cyan-400 px-4 py-3 text-base font-medium transition-colors rounded-lg hover:bg-white/5"
-              >
-                <span>Categories</span>
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-200 ${isCategoriesOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-
-              {isCategoriesOpen && (
-                <div className="mt-2 ml-4 space-y-1">
-                  <a
-                    href="#fps"
-                    className="block text-gray-400 hover:text-cyan-400 px-4 py-2 text-sm transition-colors rounded-lg hover:bg-white/5"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    FPS Games
-                  </a>
-                  <a
-                    href="#moba"
-                    className="block text-gray-400 hover:text-cyan-400 px-4 py-2 text-sm transition-colors rounded-lg hover:bg-white/5"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    MOBA
-                  </a>
-                  <a
-                    href="#battle-royale"
-                    className="block text-gray-400 hover:text-cyan-400 px-4 py-2 text-sm transition-colors rounded-lg hover:bg-white/5"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Battle Royale
-                  </a>
-                  <a
-                    href="#sports"
-                    className="block text-gray-400 hover:text-cyan-400 px-4 py-2 text-sm transition-colors rounded-lg hover:bg-white/5"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sports
-                  </a>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile Register Button */}
-            <div className="pt-2">
-              <div
-                className="rounded-[24px] p-[1.5px]"
-                style={{
-                  background:
-                    "linear-gradient(227.37deg, #6FCCA5 -19.74%, #00C6FF 17.4%, #A218D4 123.81%)",
-                }}
-              >
-                <button
-                  className="w-full px-6 py-3.5 rounded-[24px] bg-[#0a0a0a] text-white font-medium text-base hover:bg-[#151515] transition-all duration-300"
-                  onClick={() => setIsMobileMenuOpen(false)}
+              {/* Mobile Register Button */}
+              <div className="pt-4">
+                <div
+                  className="rounded-full p-[1.5px]"
+                  style={{
+                    background:
+                      "linear-gradient(227.37deg, #6FCCA5 -19.74%, #00C6FF 17.4%, #A218D4 123.81%)",
+                  }}
                 >
-                  Register Now
-                </button>
+                  <button
+                    className="w-full px-6 py-4 rounded-full bg-black/50 text-white font-medium text-base hover:bg-black/70 transition-all duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Register Now
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
-    </nav>
+
+      {/* Spacer to prevent content from hiding behind navbar */}
+      <div className="h-20 lg:h-24"></div>
+    </>
   );
 };
 
 export default LPNavbar;
-
-// Just Pushing
