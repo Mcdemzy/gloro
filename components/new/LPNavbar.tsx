@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Search, Menu, X, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import Logo from "@/assets/images/logo.png"; // Import logo directly
 
 const LPNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -37,7 +39,7 @@ const LPNavbar = () => {
         }`}
       >
         <div className="relative mx-4 lg:mx-auto max-w-[1459px] px-6 sm:px-10 lg:px-[69px]">
-          {/* Blur Background Container - Increased height */}
+          {/* Blur Background Container */}
           <div
             className={`absolute inset-0 transition-all duration-300 rounded-2xl lg:rounded-full`}
             style={{
@@ -53,17 +55,22 @@ const LPNavbar = () => {
             }}
           ></div>
 
-          {/* Navbar Content - Increased padding for more height */}
+          {/* Navbar Content */}
           <div className="relative w-full py-3 lg:py-4">
             <div className="flex items-center justify-between">
-              {/* Logo - Slightly smaller on mobile */}
+              {/* Logo - Using imported image */}
               <div className="flex-shrink-0">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-tight orbitron">
-                  Gloroq
-                </h1>
+                <Image 
+                  src={Logo} 
+                  alt="Gloroq Logo" 
+                  width={140} // Adjust based on your logo size
+                  height={50} // Adjust based on your logo size
+                  className="h-auto w-auto"
+                  priority
+                />
               </div>
 
-              {/* Desktop Search Bar - Hidden on mobile */}
+              {/* Desktop Search Bar */}
               <div className="hidden lg:flex flex-1 max-w-md mx-8">
                 <div className="relative w-full">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -200,11 +207,15 @@ const LPNavbar = () => {
               boxShadow: "-8px 0 32px 0 rgba(0, 0, 0, 0.6)",
             }}
           >
-            {/* Sidebar Header */}
+            {/* Sidebar Header - Replace text with logo here too */}
             <div className="flex items-center justify-between p-6 border-b border-white/10">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent orbitron">
-                Gloroq
-              </h2>
+              <Image 
+                src={Logo} 
+                alt="Gloroq Logo" 
+                width={100} // Smaller size for mobile sidebar
+                height={35}
+                className="h-auto w-auto"
+              />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 rounded-lg text-white hover:text-cyan-400 hover:bg-white/5 transition-colors"
@@ -213,9 +224,9 @@ const LPNavbar = () => {
               </button>
             </div>
 
-            {/* Sidebar Content */}
+            {/* Rest of your sidebar content remains the same */}
             <div className="p-6 space-y-6">
-              {/* Mobile Search Bar - Now in sidebar */}
+              {/* Mobile Search Bar */}
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <Search className="h-5 w-5 text-gray-400" />
