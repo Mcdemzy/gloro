@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HeroBG1 from "@/assets/images/HeroBG.png";
-import HeroBG2 from "@/assets/images/HeroBG3.png";
+import HeroBG2 from "@/assets/images/Group 31.svg";
 import HeroSection from "@/components/landing/HeroSection";
 import LatestCompetitions from "@/components/landing/LatestCompetitions";
 import Trending from "@/components/landing/Trending";
