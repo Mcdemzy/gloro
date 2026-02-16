@@ -1,7 +1,10 @@
-import React from "react";
-import { Calendar } from "lucide-react";
+"use client";
+import React, { useRef, useState } from "react";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 
 const Trending = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   // Sample tournament data
   const tournaments = [
     {
@@ -34,47 +37,74 @@ const Trending = () => {
     }
   ];
 
-  // Duplicate tournaments for seamless infinite scroll
-  const duplicatedTournaments = [...tournaments, ...tournaments];
+  // Scroll functions
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400; // Adjust this value based on your card width
+      const newScrollLeft = scrollContainerRef.current.scrollLeft + 
+        (direction === 'left' ? -scrollAmount : scrollAmount);
+      
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <main className="w-full py-8 sm:py-12 bg-[#020818] overflow-hidden px-4 sm:px-6 md:px-8 lg:px-12">
-      <h3 className="mb-6 sm:mb-10 text-2xl sm:text-3xl md:text-4xl font-bold text-white orbitron text-center sm:text-left">
-        Trending Tournaments
-      </h3>
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-10">
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white orbitron text-center sm:text-left">
+          Trending Tournaments
+        </h3>
+        
+        {/* Arrow Controls */}
+        <div className="flex gap-2 mt-4 sm:mt-0">
+          <button
+            onClick={() => scroll('left')}
+            className="p-2 rounded-full bg-white/5 border border-gray-700/50 hover:bg-purple-600/20 hover:border-purple-500 transition-all duration-300"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </button>
+          <button
+            onClick={() => scroll('right')}
+            className="p-2 rounded-full bg-white/5 border border-gray-700/50 hover:bg-purple-600/20 hover:border-purple-500 transition-all duration-300"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-5 h-5 text-white" />
+          </button>
+        </div>
+      </div>
 
-      {/* Infinite scroll container - Works on ALL screens */}
+      {/* Manual scroll container */}
       <div className="relative">
         {/* Gradient overlays for fade effect */}
-        {/* <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 md:w-20 lg:w-32 bg-gradient-to-r from-[#020818] to-transparent z-10 pointer-events-none"></div> */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 md:w-20 lg:w-32 bg-gradient-to-r from-[#020818] to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 md:w-20 lg:w-32 bg-gradient-to-l from-[#020818] to-transparent z-10 pointer-events-none"></div>
 
         <style>{`
-          @keyframes scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
+          /* Hide scrollbar but keep functionality */
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
           }
-          .animate-scroll {
-            animation: scroll 40s linear infinite;
-          }
-          .animate-scroll:hover {
-            animation-play-state: paused;
-          }
-          @media (max-width: 640px) {
-            .animate-scroll {
-              animation: scroll 30s linear infinite;
-            }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
           }
         `}</style>
 
-        <section className="flex gap-3 sm:gap-4 md:gap-6 pb-4 animate-scroll">
-          {duplicatedTournaments.map((tournament, index) => (
+        <section
+          ref={scrollContainerRef}
+          className="flex gap-3 sm:gap-4 md:gap-6 pb-4 overflow-x-auto scrollbar-hide"
+          style={{
+            scrollBehavior: 'smooth',
+            cursor: 'grab'
+          }}
+        >
+          {tournaments.map((tournament) => (
             <div
-              key={`${tournament.id}-${index}`}
+              key={tournament.id}
               className="bg-[#00000080] border border-[#CBE1EE80] min-w-[280px] xs:min-w-[300px] sm:min-w-[320px] md:min-w-[350px] lg:min-w-[380px] xl:min-w-[420px] p-3 sm:p-4 rounded-xl flex gap-3 sm:gap-4 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 group flex-shrink-0"
             >
               <div className="border border-[#87A1A2] rounded-xl overflow-hidden flex-shrink-0">
@@ -118,18 +148,17 @@ const Trending = () => {
         </section>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Simple scroll indicator */}
       <div className="flex justify-center gap-2 mt-4 sm:mt-6">
         {[1, 2, 3].map((dot) => (
           <div
             key={dot}
-            className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 animate-pulse"
-            style={{ animationDelay: `${dot * 150}ms` }}
+            className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400"
           ></div>
         ))}
       </div>
 
-      {/* View all button - Optional */}
+      {/* View all button */}
       <div className="mt-6 sm:mt-8 flex justify-center">
         <button className="px-6 py-2.5 sm:px-8 sm:py-3 border border-purple-500 text-white rounded-full hover:bg-purple-500/20 transition-all text-sm sm:text-base">
           View All Tournaments

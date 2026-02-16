@@ -1,10 +1,12 @@
 import React from "react";
 import { ChevronDown, Gamepad2 } from "lucide-react";
+import Image from "next/image";
+import HeroBanner from "@/assets/images/hero-banner.png";
 
 const HeroSection = () => {
   return (
-    <main className="relative flex flex-col items-center justify-center -h-[90vh] sm:min-h-screen px-4 sm:px-6 text-center overflow-hidden">
-      {/* Animated background elements - Optimized for mobile */}
+    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 text-center overflow-hidden">
+      {/* Animated background elements (same as above) */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-40 h-40 sm:w-72 sm:h-72 bg-purple-600/10 rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
         <div className="absolute bottom-10 sm:bottom-20 right-4 sm:right-10 w-48 h-48 sm:w-96 sm:h-96 bg-cyan-500/10 rounded-full blur-2xl sm:blur-3xl animate-pulse delay-700"></div>
@@ -13,7 +15,6 @@ const HeroSection = () => {
 
       {/* Main content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top spacing adjusted for navbar */}
         <div className="pt-16 sm:pt-20 md:pt-32 lg:pt-40">
           <h1 className="font-bold text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight tracking-tight sm:tracking-wide orbitron">
             THE ULTIMATE{" "}
@@ -32,23 +33,24 @@ const HeroSection = () => {
             and community—designed for players and creators.
           </p>
 
-          {/* Animated chevron icon */}
-          <div className="mt-8 sm:mt-12 mb-8 sm:mb-12 flex justify-center">
-            <div className="relative">
-              <ChevronDown
-                className="text-cyan-400 animate-bounce w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
-                strokeWidth={2}
+          {/* Hero Banner Image - 85% width */}
+          <div className="w-[85%] mx-auto mt-12 sm:mt-16 md:mt-20">
+            <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] lg:aspect-[24/9]">
+              <Image
+                src={HeroBanner}
+                alt="Gaming Hero Banner"
+                fill
+                className="object-contain"
+                priority
+                sizes="(max-width: 640px) 85vw, (max-width: 1024px) 80vw, 1200px"
               />
-              <div className="absolute inset-0 bg-cyan-400/20 blur-xl rounded-full"></div>
             </div>
           </div>
 
-          {/* CTA Button - Responsive sizing */}
-          <div className="flex justify-center px-4 sm:px-0">
+          {/* CTA Button */}
+          <div className="flex justify-center px-4 sm:px-0 mt-8 sm:mt-10">
             <button className="group relative px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg sm:rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden w-full max-w-xs sm:max-w-none sm:w-auto">
-              {/* Button shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-
               <span className="relative flex items-center justify-center gap-2">
                 <Gamepad2 className="w-4 h-4 sm:w-5 sm:h-5" />
                 See all Tournaments
@@ -56,14 +58,16 @@ const HeroSection = () => {
             </button>
           </div>
 
+          
+
           {/* Additional subtle text */}
-          <p className="mt-4 sm:mt-6 text-xs sm:text-sm text-gray-500">
+          {/* <p className="mt-6 sm:mt-8 text-xs sm:text-sm text-gray-500">
             Join thousands of gamers worldwide
-          </p>
+          </p> */}
         </div>
       </div>
 
-      {/* Bottom gradient fade - Responsive height */}
+      {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-24 md:h-32 bg-gradient-to-t from-[#020818] to-transparent"></div>
     </main>
   );
