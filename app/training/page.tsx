@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Search, Calendar, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
 
 // Define interfaces for type safety
 interface Training {
@@ -115,13 +116,13 @@ const trainingData: Training[] = [
 // Training Detail Page Component
 const TrainingDetail = ({ training, onBack }: TrainingDetailProps) => {
   return (
-    <div className="w-full bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a] min-h-screen">
+    <div className="w-full bg-linear-to-br from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a] min-h-screen">
       <div className="w-full px-6 md:px-12 lg:px-24 py-20">
         <div className="max-w-5xl mx-auto">
           {/* Back Button */}
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 cursor-pointer"
           >
             <svg
               className="w-5 h-5"
@@ -249,30 +250,30 @@ const TrainingSection = () => {
   }
 
   return (
-    <main>
+    <main className="bg-[#020818]">
       <Navbar />
-      <div className="w-full bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2e] to-[#0a0a1a] min-h-screen">
+      <div className="w-full min-h-screen pt-52">
         {/* Hero Section */}
-        <div className="w-full px-6 md:px-12 lg:px-24 pt-40 pb-12">
+        <div className="w-full px-6 md:px-12 lg:px-24 pb-18">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 orbitron">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 orbitron tracking-[5%]">
               ENJOY YOUR <br />
-              <span className="text-[#3b82f6]">TRAINING</span>
+              <span className="text-[#3b82f6] text-7xl">TRAINING</span>
             </h1>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-12">
+            <p className="text-[#FFFFFFC7] font-normal text-lg max-w-4xl mx-auto mb-12">
               All your gaming essentials in one place. Tournaments, news,
               streams and community—designed for players and creators.
             </p>
 
             {/* Search Bar */}
-            <div className="max-w-xl mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+            <div className="max-w-lg mx-auto relative">
+              <Search className="absolute left-4 top-1/2 z-10 -translate-y-1/2 w-5 h-5 text-[#FFFFFF]" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#1a1a2e]/60 backdrop-blur-sm border border-gray-700/50 rounded-lg pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#3b82f6]"
+                className="w-full bg-transparent backdrop-blur-sm border border-[#DCDCDC] rounded-lg pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#3b82f6]"
               />
             </div>
           </div>
@@ -281,15 +282,19 @@ const TrainingSection = () => {
         {/* Training Cards Grid */}
         <div className="w-full px-6 md:px-12 lg:px-24 pb-20">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
               {filteredData.map((training) => (
                 <div
                   key={training.id}
-                  className="bg-[#1a1a2e]/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-800/50 hover:border-gray-700 transition-all cursor-pointer group"
+                  className="backdrop-blur-sm rounded-lg overflow-hidden border border-gray-800/50 hover:border-gray-700 transition-all cursor-pointer group"
                   onClick={() => setSelectedTraining(training)}
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(5, 27, 36, 0) 0%, rgba(9, 61, 82, 0.25) 100%), linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 100%)",
+                  }}
                 >
                   {/* Card Image */}
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative h-56 overflow-hidden p-6">
                     <img
                       src={training.image}
                       alt={training.title}
@@ -298,19 +303,21 @@ const TrainingSection = () => {
                   </div>
 
                   {/* Card Content */}
-                  <div className="p-6">
+                  <div className="p-6 pt-0">
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-xl font-semibold text-white flex-1 line-clamp-2">
                         {training.title}
                       </h3>
-                      <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-[#3b82f6] transition-colors flex-shrink-0 ml-2" />
+                      <div className="bg-[#00000080] p-2 rounded-full">
+                        <ArrowUpRight className="text-[#2CCCFF] group-hover:text-[#3b82f6] transition-colors shrink-0" />
+                      </div>
                     </div>
 
-                    <p className="text-gray-400 text-sm mb-6 line-clamp-2">
+                    <p className="text-[#EFEFEF] mb-32 line-clamp-2">
                       {training.description}
                     </p>
 
-                    <div className="flex items-center text-gray-500 text-sm">
+                    <div className="flex items-center text-[#EFEFEF] text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
                       {training.date}
                     </div>
@@ -321,7 +328,7 @@ const TrainingSection = () => {
 
             {/* Load More Button */}
             <div className="text-center">
-              <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium px-8 py-3 rounded-lg transition-all inline-flex items-center gap-2">
+              <button className="bg-[#59366D] hover:bg-purple-700 text-white font-medium px-8 py-3 rounded-lg transition-all inline-flex items-center gap-2 cursor-pointer">
                 Load More
                 <svg
                   className="w-5 h-5"
@@ -341,6 +348,7 @@ const TrainingSection = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 };

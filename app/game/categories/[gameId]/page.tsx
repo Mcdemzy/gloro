@@ -13,11 +13,18 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
+import rectangle from "@/assets/images/Rectangle.png";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const GameSpecificPage = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+    const [visibleCount, setVisibleCount] = useState(6);
   const params = useParams();
   const gameId = params.gameId as string;
+  const pathname = usePathname();
 
   // Map game slugs to titles
   const gameTitles: Record<string, string> = {
@@ -32,7 +39,7 @@ const GameSpecificPage = () => {
 
   const sidebarItems = [
     { icon: Home, label: "Home", href: "/" },
-    { icon: Trophy, label: "Tournaments", href: "/tournaments" },
+    { icon: Trophy, label: "Tournaments", href: "/tournaments/hub" },
     { icon: Gamepad2, label: "Games", href: "/game/categories", active: true },
     { icon: Users, label: "Community", href: "#" },
     { icon: Settings, label: "Settings", href: "#" },
@@ -121,156 +128,200 @@ const GameSpecificPage = () => {
     },
   ];
 
+    const filteredTournaments = tournaments.filter((t) => {
+      const matchesFilter =
+        activeFilter === "All" ? true : t.type === activeFilter;
+      return matchesFilter;
+    });
+  
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    setVisibleCount(6);
+  }
+
   return (
-    <div className="flex min-h-screen bg-gradient-to-b from-[#020818] via-[#0a1628] to-[#020818]">
-      {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-screen w-20 bg-[#1a1d2e]/80 backdrop-blur-md border-r border-purple-500/20 flex flex-col items-center py-8 z-50">
-        {/* Decorative line */}
-        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-purple-500 to-transparent"></div>
+    <div className="min-h-screen bg-[#020818]">
+      <Navbar />
+      <div className="flex pt-44">
+        {/* Sidebar */}
+        <aside className="fixed top-[180px] left-10 h-[400px]">
+          <div className="relative w-16 h-[400px]">
+            <Image
+              src={rectangle}
+              alt="Side Profile"
+              className="w-full h-full opacity-80"
+              fill
+            />
+            <div className="absolute inset-0 flex flex-col items-center space-y-8 pt-2">
+              {sidebarItems.map((item, index) => {
+                const Icon = item.icon;
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== "/" && pathname.startsWith(item.href));
 
-        <div className="space-y-6">
-          {sidebarItems.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={index}
-                href={item.href}
-                className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group relative ${
-                  item.active
-                    ? "bg-purple-600 text-white shadow-lg shadow-purple-500/50"
-                    : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-cyan-400"
-                }`}
-              >
-                <Icon size={22} />
-                {/* Tooltip */}
-                <span className="absolute left-full ml-4 px-3 py-2 bg-[#1a1d2e] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap border border-purple-500/20">
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 ml-20">
-        <div className="max-w-7xl mx-auto px-8 py-12">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-white mb-4">{gameTitle}</h1>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-              Explore all ongoing, upcoming and past gaming Tournaments. Join,
-              watch or follow your favorite games.
-            </p>
-          </div>
-
-          {/* Tournaments Section */}
-          <section>
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl font-bold text-white">
-                {gameTitle} Tournaments
-              </h2>
-
-              {/* Filter Tabs */}
-              <div className="flex gap-2 bg-white/5 p-1 rounded-xl">
-                {filters.map((filter) => (
-                  <button
-                    key={filter}
-                    onClick={() => setActiveFilter(filter)}
-                    className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      activeFilter === filter
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-400 hover:text-white"
+                return (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group relative last:pt-16 ${
+                      isActive
+                        ? "bg-purple-600 text-white shadow-lg shadow-purple-500/50"
+                        : "text-gray-400 hover:text-cyan-400"
                     }`}
                   >
-                    {filter}
-                  </button>
+                    <Icon size={20} />
+                    <span className="absolute left-full ml-4 px-3 py-2 bg-[#1a1d2e] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap border border-purple-500/20">
+                      {item.label}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 ml-20">
+          <div className="max-w-7xl mx-auto px-8 py-12">
+            {/* Header */}
+            <div className="text-center mb-24">
+              <h1 className="text-6xl font-extrabold text-white mb-4 orbitron">
+                {gameTitle}
+              </h1>
+              <p className="text-[#E0F5FB] font-medium text-xl max-w-4xl mx-auto">
+                Explore all ongoing, upcoming and past gaming Tournaments. Join,
+                watch or follow your favorite games.
+              </p>
+            </div>
+
+            {/* Tournaments Section */}
+            <section>
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold orbitron text-white">
+                  {gameTitle} Tournaments
+                </h2>
+
+                {/* Filter Tabs */}
+                <div className="flex gap-6 p-1 rounded-xl">
+                  {filters.map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => handleFilterChange(filter)}
+                      style={
+                        activeFilter === filter
+                          ? {
+                              background:
+                                "linear-gradient(180deg, #0458EA -55.88%, #102D89 22.06%, #151758 61.03%, #180C40 80.51%, #190634 90.26%, #1B0128 100%)",
+                            }
+                          : {}
+                      }
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border border-[#779BA0B2] text-[#FFFFFF] cursor-pointer ${
+                        activeFilter === filter ? "" : "bg-[#000A15]"
+                      }`}
+                    >
+                      {filter}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tournament Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mb-12">
+                {tournaments.slice(0, visibleCount).map((tournament) => (
+                  <div
+                    key={tournament.id}
+                    className="group border border-[#455872] overflow-hidden hover:border-cyan-400/50 hover:shadow-[0_0_48px_2px_#0195D9] transition-all duration-300"
+                    style={{
+                      background: "linear-gradient(to right, #040a1f, #02050e)",
+                    }}
+                  >
+                    {/* Image */}
+                    <div className="relative overflow-hidden rounded-b-2xl border-2 border-[#80A1CE]">
+                        <img
+                          src={tournament.image}
+                          alt={tournament.title}
+                          className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {/* Gradient overlay at bottom of image */}
+                        <div
+                          className="absolute inset-0 opacity-60"
+                          style={{
+                            background:
+                              "linear-gradient(to top, #051225, transparent, transparent)",
+                          }}
+                        />
+                      </div>
+
+                    {/* Content */}
+                    <div className="p-5 space-y-3">
+                      <h3 className="text-xl font-bold text-white transition-colors mb-4">
+                        {tournament.title}
+                      </h3>
+
+                      <div className="space-y-4">
+                        <p className="text-[#02DD6A] font-medium text-lg">
+                          Grand Prize: {tournament.prize}
+                        </p>
+                        <p className="text-[#87A1A2] text-base flex items-center gap-2">
+                          <Calendar size={20} className="text-[#87A1A2]" />
+                          {tournament.date}
+                        </p>
+                        <p className="text-[#87A1A2] text-base">
+                          {tournament.type}
+                        </p>
+                      </div>
+
+                      {/* Status Badge */}
+                      <div className="w-fit mt-4 mb-6">
+                        <span
+                          className={`text-base px-4 py-2 rounded-full font-medium inline-flex items-center gap-1 ${
+                            tournament.statusType === "registration"
+                              ? "bg-[#09362A] border border-[#02DD6A] text-[#02DD6A]"
+                              : tournament.statusType === "live"
+                                ? "bg-[#260612] border border-[#611B28] text-[#FF6467]"
+                                : "bg-[#210626] border border-[#4C1B61] text-[#E864FF]"
+                          }`}
+                        >
+                          {tournament.statusType === "live" && "● "}
+                          {tournament.statusType === "upcoming" && (
+                            <TrendingUp size={12} />
+                          )}
+                          {tournament.status}
+                        </span>
+                      </div>
+
+                      <Link
+                        href={`/tournaments/${tournament.slug}`}
+                        className="w-full bg-[#030D0F] border border-[#71D4F7] hover:bg-cyan-400/10 font-medium py-3 transition-all duration-300 mt-6 text-[#71D4F7] flex item-center justify-center"
+                      >
+                        {tournament.buttonText}
+                      </Link>
+                    </div>
+                  </div>
                 ))}
               </div>
-            </div>
 
-            {/* Tournament Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {tournaments.map((tournament) => (
-                <div
-                  key={tournament.id}
-                  className="group bg-[#0a1628] border border-[#455872] rounded-2xl overflow-hidden hover:border-cyan-400/50 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300"
-                >
-                  {/* Image */}
-                  <div className="relative overflow-hidden h-64">
-                    <div
-                      className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${tournament.image})` }}
-                    >
-                      {/* Overlay with FORTNITE text effect */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-orange-500/60 via-orange-600/40 to-[#0a1628] flex items-start justify-center pt-8">
-                        <div
-                          className="text-white text-6xl font-black tracking-wider opacity-90"
-                          style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
-                        >
-                          FORTNITE
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-5 space-y-3">
-                    <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
-                      {tournament.title}
-                    </h3>
-
-                    <div className="space-y-2 text-sm">
-                      <p className="text-green-400 font-bold text-lg">
-                        Grand Prize: {tournament.prize}
-                      </p>
-                      <p className="text-gray-400 flex items-center gap-2">
-                        <Calendar size={14} className="text-cyan-400" />
-                        {tournament.date}
-                      </p>
-                      <p className="text-gray-500 text-xs">{tournament.type}</p>
-                    </div>
-
-                    {/* Status Badge */}
-                    <div className="pt-2">
-                      <span
-                        className={`text-xs px-3 py-1 rounded-full font-semibold inline-flex items-center gap-1 ${
-                          tournament.statusType === "registration"
-                            ? "bg-green-500/20 text-green-400"
-                            : tournament.statusType === "live"
-                            ? "bg-red-500/20 text-red-400"
-                            : "bg-purple-500/20 text-purple-400"
-                        }`}
-                      >
-                        {tournament.statusType === "live" && "● "}
-                        {tournament.statusType === "upcoming" && (
-                          <TrendingUp size={12} />
-                        )}
-                        {tournament.status}
-                      </span>
-                    </div>
-
-                    <Link
-                      href={`/tournaments/${tournament.slug}`}
-                      className="w-full bg-transparent border border-green-400 text-green-400 hover:bg-green-400 hover:text-white font-semibold py-3 rounded-xl transition-all duration-300 mt-3 flex items-center justify-center"
-                    >
-                      {tournament.buttonText}
-                    </Link>
-                  </div>
+              {/* Load More Button */}
+              {visibleCount < filteredTournaments.length && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setVisibleCount((prev) => prev + 6)}
+                    className="px-8 py-3 text-[#030411] rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50 cursor-pointer mt-10"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, #80E3FF 0%, #00C6FF 50%, #00C6FF 75%, #00C6FF 87.5%, #01A3D1 100%)",
+                    }}
+                  >
+                    Load More
+                    <ChevronDown size={20} />
+                  </button>
                 </div>
-              ))}
-            </div>
-
-            {/* Load More Button */}
-            <div className="flex justify-center">
-              <button className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50">
-                Load More
-                <ChevronDown size={20} />
-              </button>
-            </div>
-          </section>
-        </div>
-      </main>
+              )}
+            </section>
+          </div>
+        </main>
+      </div>
+      <Footer />
     </div>
   );
 };
