@@ -17,17 +17,17 @@ const HeroSection = () => {
 
       {/* Main content */}
       <div className="relative z-10">
-        <h1 className="font-bold text-5xl md:text-7xl leading-tight tracking-wide mt-44 orbitron">
+        <h1 className="font-bold text-4xl md:text-7xl leading-tight tracking-wide md:mt-44 mt-10 orbitron">
           THE ULTIMATE <br />
-          <span className="bg-linear-to-r from-[#7C3AED] via-[#2F82EE] to-[#00AEEF] bg-clip-text text-transparent font-extrabold text-6xl md:text-8xl mr-2">
+          <span className="bg-linear-to-r from-[#7C3AED] via-[#2F82EE] to-[#00AEEF] bg-clip-text text-transparent font-extrabold text-5xl md:text-8xl mr-2">
             GAMING{" "}
           </span>
-          <span className="font-extrabold text-6xl md:text-8xl text-white">
+          <span className="font-extrabold text-5xl md:text-8xl text-white">
             PLATFORM
           </span>
         </h1>
 
-        <p className="mt-4 max-w-2xl mx-auto text-lg font-normal text-[#FFFFFFC7] leading-[28px] tracking-[2%]">
+        <p className="mt-4 max-w-2xl mx-auto md:text-lg text-base font-normal text-[#FFFFFFC7] leading-7 tracking-[2%]">
           All your gaming essentials in one place. Tournaments, news, streams
           and community—designed for players and creators.
         </p>

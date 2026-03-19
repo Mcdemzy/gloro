@@ -21,12 +21,11 @@ import { usePathname } from "next/navigation";
 
 const GameSpecificPage = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-    const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(6);
   const params = useParams();
   const gameId = params.gameId as string;
   const pathname = usePathname();
 
-  // Map game slugs to titles
   const gameTitles: Record<string, string> = {
     "fifa-mobile": "FIFA Mobile",
     "call-of-duty-mobile": "Call Of Duty - Mobile",
@@ -128,23 +127,23 @@ const GameSpecificPage = () => {
     },
   ];
 
-    const filteredTournaments = tournaments.filter((t) => {
-      const matchesFilter =
-        activeFilter === "All" ? true : t.type === activeFilter;
-      return matchesFilter;
-    });
-  
+  const filteredTournaments = tournaments.filter((t) => {
+    const matchesFilter =
+      activeFilter === "All" ? true : t.type === activeFilter;
+    return matchesFilter;
+  });
+
   const handleFilterChange = (filter: string) => {
     setActiveFilter(filter);
     setVisibleCount(6);
-  }
+  };
 
   return (
     <div className="min-h-screen bg-[#020818]">
       <Navbar />
-      <div className="flex pt-44">
-        {/* Sidebar */}
-        <aside className="fixed top-[180px] left-10 h-[400px]">
+      <div className="flex pt-32 md:pt-44">
+        {/* Sidebar — hidden on mobile */}
+        <aside className="hidden lg:block fixed top-[180px] left-10 h-[400px]">
           <div className="relative w-16 h-[400px]">
             <Image
               src={rectangle}
@@ -158,7 +157,6 @@ const GameSpecificPage = () => {
                 const isActive =
                   pathname === item.href ||
                   (item.href !== "/" && pathname.startsWith(item.href));
-
                 return (
                   <a
                     key={index}
@@ -181,14 +179,14 @@ const GameSpecificPage = () => {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 ml-20">
-          <div className="max-w-7xl mx-auto px-8 py-12">
+        <main className="flex-1 lg:ml-20">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
             {/* Header */}
-            <div className="text-center mb-24">
-              <h1 className="text-6xl font-extrabold text-white mb-4 orbitron">
+            <div className="text-center mb-10 md:mb-24">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-3 md:mb-4 orbitron">
                 {gameTitle}
               </h1>
-              <p className="text-[#E0F5FB] font-medium text-xl max-w-4xl mx-auto">
+              <p className="text-[#E0F5FB] font-medium text-sm sm:text-base md:text-xl max-w-4xl mx-auto px-2">
                 Explore all ongoing, upcoming and past gaming Tournaments. Join,
                 watch or follow your favorite games.
               </p>
@@ -196,13 +194,15 @@ const GameSpecificPage = () => {
 
             {/* Tournaments Section */}
             <section>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold orbitron text-white">
+              {/* Title + Filters — stacked on mobile */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 md:mb-8">
+                <h2 className="text-base sm:text-xl md:text-2xl font-bold orbitron text-white">
                   {gameTitle} Tournaments
                 </h2>
 
-                {/* Filter Tabs */}
-                <div className="flex gap-6 p-1 rounded-xl">
+                {/* Filter Tabs — scrollable on mobile */}
+                <div className="flex gap-2 md:gap-6 p-1 rounded-xl overflow-x-auto scrollbar-hide">
+                  <style>{`.scrollbar-hide::-webkit-scrollbar { display: none; }`}</style>
                   {filters.map((filter) => (
                     <button
                       key={filter}
@@ -215,7 +215,7 @@ const GameSpecificPage = () => {
                             }
                           : {}
                       }
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 border border-[#779BA0B2] text-[#FFFFFF] cursor-pointer ${
+                      className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-300 border border-[#779BA0B2] text-[#FFFFFF] cursor-pointer whitespace-nowrap shrink-0 ${
                         activeFilter === filter ? "" : "bg-[#000A15]"
                       }`}
                     >
@@ -226,7 +226,7 @@ const GameSpecificPage = () => {
               </div>
 
               {/* Tournament Cards Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-14 mb-12">
                 {tournaments.slice(0, visibleCount).map((tournament) => (
                   <div
                     key={tournament.id}
@@ -237,44 +237,46 @@ const GameSpecificPage = () => {
                   >
                     {/* Image */}
                     <div className="relative overflow-hidden rounded-b-2xl border-2 border-[#80A1CE]">
-                        <img
-                          src={tournament.image}
-                          alt={tournament.title}
-                          className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        {/* Gradient overlay at bottom of image */}
-                        <div
-                          className="absolute inset-0 opacity-60"
-                          style={{
-                            background:
-                              "linear-gradient(to top, #051225, transparent, transparent)",
-                          }}
-                        />
-                      </div>
+                      <img
+                        src={tournament.image}
+                        alt={tournament.title}
+                        className="w-full h-48 sm:h-56 md:h-72 object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div
+                        className="absolute inset-0 opacity-60"
+                        style={{
+                          background:
+                            "linear-gradient(to top, #051225, transparent, transparent)",
+                        }}
+                      />
+                    </div>
 
                     {/* Content */}
-                    <div className="p-5 space-y-3">
-                      <h3 className="text-xl font-bold text-white transition-colors mb-4">
+                    <div className="p-4 md:p-5 space-y-2 md:space-y-3">
+                      <h3 className="text-base md:text-xl font-bold text-white transition-colors mb-3 md:mb-4">
                         {tournament.title}
                       </h3>
 
-                      <div className="space-y-4">
-                        <p className="text-[#02DD6A] font-medium text-lg">
+                      <div className="space-y-2 md:space-y-4">
+                        <p className="text-[#02DD6A] font-medium text-sm md:text-lg">
                           Grand Prize: {tournament.prize}
                         </p>
-                        <p className="text-[#87A1A2] text-base flex items-center gap-2">
-                          <Calendar size={20} className="text-[#87A1A2]" />
+                        <p className="text-[#87A1A2] text-sm md:text-base flex items-center gap-2">
+                          <Calendar
+                            size={16}
+                            className="text-[#87A1A2] shrink-0"
+                          />
                           {tournament.date}
                         </p>
-                        <p className="text-[#87A1A2] text-base">
+                        <p className="text-[#87A1A2] text-sm md:text-base">
                           {tournament.type}
                         </p>
                       </div>
 
                       {/* Status Badge */}
-                      <div className="w-fit mt-4 mb-6">
+                      <div className="w-fit mt-3 md:mt-4 mb-4 md:mb-6">
                         <span
-                          className={`text-base px-4 py-2 rounded-full font-medium inline-flex items-center gap-1 ${
+                          className={`text-xs md:text-base px-3 md:px-4 py-1.5 md:py-2 rounded-full font-medium inline-flex items-center gap-1 ${
                             tournament.statusType === "registration"
                               ? "bg-[#09362A] border border-[#02DD6A] text-[#02DD6A]"
                               : tournament.statusType === "live"
@@ -284,7 +286,7 @@ const GameSpecificPage = () => {
                         >
                           {tournament.statusType === "live" && "● "}
                           {tournament.statusType === "upcoming" && (
-                            <TrendingUp size={12} />
+                            <TrendingUp size={11} />
                           )}
                           {tournament.status}
                         </span>
@@ -292,7 +294,7 @@ const GameSpecificPage = () => {
 
                       <Link
                         href={`/tournaments/${tournament.slug}`}
-                        className="w-full bg-[#030D0F] border border-[#71D4F7] hover:bg-cyan-400/10 font-medium py-3 transition-all duration-300 mt-6 text-[#71D4F7] flex item-center justify-center"
+                        className="w-full bg-[#030D0F] border border-[#71D4F7] hover:bg-cyan-400/10 text-sm md:text-base font-medium py-2.5 md:py-3 transition-all duration-300 mt-4 md:mt-6 text-[#71D4F7] flex items-center justify-center"
                       >
                         {tournament.buttonText}
                       </Link>
@@ -306,14 +308,14 @@ const GameSpecificPage = () => {
                 <div className="flex justify-center">
                   <button
                     onClick={() => setVisibleCount((prev) => prev + 6)}
-                    className="px-8 py-3 text-[#030411] rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50 cursor-pointer mt-10"
+                    className="px-6 md:px-8 py-2.5 md:py-3 text-[#030411] rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50 cursor-pointer mt-6 md:mt-10 text-sm md:text-base"
                     style={{
                       background:
                         "linear-gradient(180deg, #80E3FF 0%, #00C6FF 50%, #00C6FF 75%, #00C6FF 87.5%, #01A3D1 100%)",
                     }}
                   >
                     Load More
-                    <ChevronDown size={20} />
+                    <ChevronDown size={18} />
                   </button>
                 </div>
               )}

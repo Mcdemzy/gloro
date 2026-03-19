@@ -72,9 +72,9 @@ const GameCategoriesPage = () => {
   return (
     <div className="min-h-screen bg-[#020818]">
       <Navbar />
-      <div className="flex pt-44">
-        {/* Sidebar */}
-        <aside className="fixed top-[180px] left-10 h-[400px]">
+      <div className="flex pt-32 md:pt-44">
+        {/* Sidebar — hidden on mobile */}
+        <aside className="hidden lg:block fixed top-[180px] left-10 h-[400px]">
           <div className="relative w-16 h-[400px]">
             <Image
               src={rectangle}
@@ -86,7 +86,6 @@ const GameCategoriesPage = () => {
               {sidebarItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
-
                 return (
                   <a
                     key={index}
@@ -109,14 +108,14 @@ const GameCategoriesPage = () => {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 ml-20">
-          <div className="max-w-7xl mx-auto px-8 py-12">
+        <main className="flex-1 lg:ml-20">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
             {/* Header */}
-            <div className="text-center mb-12">
-              <h1 className="text-5xl font-bold text-white mb-4 orbitron">
+            <div className="text-center mb-8 md:mb-12">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 md:mb-4 orbitron">
                 Game Categories
               </h1>
-              <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+              <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-3xl mx-auto px-2">
                 Explore all ongoing, upcoming and past gaming Tournaments. Join,
                 watch or follow your favorite games.
               </p>
@@ -124,12 +123,12 @@ const GameCategoriesPage = () => {
 
             {/* Games Section */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-8 orbitron">
+              <h2 className="text-xl md:text-3xl font-bold text-white mb-6 md:mb-8 orbitron">
                 Games
               </h2>
 
               {/* Games Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-14 mb-12">
                 {games.map((game) => (
                   <div
                     key={game.id}
@@ -143,9 +142,8 @@ const GameCategoriesPage = () => {
                       <img
                         src={game.image}
                         alt={game.title}
-                        className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-48 sm:h-56 md:h-72 object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      {/* Gradient overlay at bottom of image */}
                       <div
                         className="absolute inset-0 opacity-60"
                         style={{
@@ -156,14 +154,14 @@ const GameCategoriesPage = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="p-5 space-y-20">
-                      <h3 className="text-xl font-bold text-white transition-colors orbitron leading-[100%] tracking-[0%]">
+                    <div className="p-4 md:p-5 space-y-8 md:space-y-20">
+                      <h3 className="text-base md:text-xl font-bold text-white transition-colors orbitron leading-[100%] tracking-[0%]">
                         {game.title}
                       </h3>
 
                       <Link
                         href={`/game/categories/${game.slug}`}
-                        className="w-full bg-[#030D0F] border border-[#71D4F7] text-[#71D4F7] hover:bg-cyan-400/10 font-medium py-3 transition-all duration-300 flex items-center justify-center cursor-pointer"
+                        className="w-full bg-[#030D0F] border border-[#71D4F7] text-[#71D4F7] hover:bg-cyan-400/10 text-sm md:text-base font-medium py-2.5 md:py-3 transition-all duration-300 flex items-center justify-center cursor-pointer"
                       >
                         See Tournaments
                       </Link>
@@ -177,14 +175,14 @@ const GameCategoriesPage = () => {
                 <div className="flex justify-center">
                   <button
                     onClick={() => setVisibleCount((prev) => prev + 6)}
-                    className="px-8 py-3 text-[#030411] rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50 cursor-pointer mt-10"
+                    className="px-6 md:px-8 py-2.5 md:py-3 text-[#030411] rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50 cursor-pointer mt-6 md:mt-10 text-sm md:text-base"
                     style={{
                       background:
                         "linear-gradient(180deg, #80E3FF 0%, #00C6FF 50%, #00C6FF 75%, #00C6FF 87.5%, #01A3D1 100%)",
                     }}
                   >
                     Load More
-                    <ChevronDown size={20} />
+                    <ChevronDown size={18} />
                   </button>
                 </div>
               )}

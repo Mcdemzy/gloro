@@ -57,8 +57,8 @@ const LatestCompetitions = () => {
     <main className="w-full py-16 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-12">
-          <h3 className="text-2xl font-bold text-white orbitron">
+        <div className="flex justify-between items-center mb-6 md:mb-12">
+          <h3 className="text-base md:text-2xl font-semibold md:font-bold text-white orbitron">
             Latest Tournaments
           </h3>
           <button className="text-cyan-400 hover:text-cyan-300 flex items-center gap-2 group transition-colors cursor-pointer">
@@ -71,7 +71,7 @@ const LatestCompetitions = () => {
         </div>
 
         {/* Competition Cards Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-20">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20">
           {competitions.map((comp) => (
             <div
               key={comp.id}
@@ -91,29 +91,29 @@ const LatestCompetitions = () => {
               {/* Content */}
               <div className="p-6 space-y-3">
                 {/* Title */}
-                <h2 className="text-xl font-bold text-white transition-colors orbitron">
+                <h2 className="text-lg md:text-xl font-bold text-white transition-colors orbitron">
                   {comp.title}
                 </h2>
 
                 {/* Date */}
-                <p className="flex items-center gap-2 text-[#02DD6A] text-lg font-medium">
+                <p className="flex items-center gap-2 text-[#02DD6A] text-base md:text-lg font-medium">
                   <Calendar size={16} />
                   {comp.date}
                 </p>
 
                 {/* Organizer */}
-                <p className="flex items-center gap-2 text-[#87A1A2] text-base">
+                <p className="flex items-center gap-2 text-[#87A1A2] text-sm md:text-base">
                   <Users size={20} />
                   {comp.organizer}
                 </p>
 
                 {/* Games */}
-                <p className="text-base text-[#87A1A2]">{comp.games}</p>
+                <p className="text-sm md:text-base text-[#87A1A2]">{comp.games}</p>
 
                 {/* Status Badge */}
                 <div className="pt-2">
                   <span
-                    className={`${comp.bgStatusColor} text-[${comp.borderStatusColor}] border border-[${comp.borderStatusColor}] text-base px-4 py-2 rounded-full font-medium inline-block`}
+                    className={`${comp.bgStatusColor} text-[${comp.borderStatusColor}] border border-[${comp.borderStatusColor}] text-sm md:text-base px-4 py-2 rounded-full font-medium inline-block`}
                   >
                     {comp.status}
                   </span>

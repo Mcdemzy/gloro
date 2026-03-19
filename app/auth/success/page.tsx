@@ -30,10 +30,11 @@ const SuccessPage = () => {
         backgroundImage: `url(${BG.src})`,
       }}
     >
+      <div className="inset-0 bg-[#00000033] absolute top-0 left-0 right-0 z-0 pointer-events-none"></div>
       {/* Gloro Logo - Top Left */}
-      <div className="pt-12 pl-12 md:pl-16 lg:pl-20">
+      <div className="pt-12 pl-12 md:pl-16 lg:pl-20 z-10 relative">
         <h1
-          className="orbitron text-[48px] font-bold leading-[100%]"
+          className="orbitron text-3xl md:text-[48px] font-bold leading-[100%]"
           style={{
             background: "#00AAE7",
             WebkitBackgroundClip: "text",
@@ -46,9 +47,9 @@ const SuccessPage = () => {
       </div>
 
       {/* Main Content - Centered */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 z-10 realtive">
         {/* Character Image with Stars */}
-        <div className="relative w-full max-w-[360px] mb-16">
+        <div className="relative w-full max-w-[500px] mb-10">
           {/* Floating Stars */}
           <div className="absolute -top-8 right-1/4 animate-twinkle">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none">

@@ -10,10 +10,11 @@ const ActivationLinkPage = () => {
         backgroundImage: `url(${BG.src})`,
       }}
     >
+      <div className="inset-0 bg-[#00000033] absolute top-0 left-0 right-0 z-0 pointer-events-none"></div>
       {/* Gloro Logo - Top Left */}
-      <div className="pt-12 pl-12 md:pl-16 lg:pl-20">
+      <div className="pt-12 pl-12 md:pl-16 lg:pl-20 z-10 relative">
         <h1
-          className="orbitron text-[48px] font-bold leading-[100%]"
+          className="orbitron text-3xl md:text-[48px] font-bold leading-[100%]"
           style={{
             background: "#00AAE7",
             WebkitBackgroundClip: "text",
@@ -28,7 +29,7 @@ const ActivationLinkPage = () => {
       {/* Main Content - Centered */}
       <div className="flex-1 flex flex-col items-center justify-center px-4">
         {/* Dice Image */}
-        <div className="w-full max-w-[360px] mb-16">
+        <div className="w-full max-w-[500px] mb-10">
           <img
             src={DiceImage.src}
             alt="Dice"
@@ -40,7 +41,7 @@ const ActivationLinkPage = () => {
         </div>
 
         {/* Text Content */}
-        <div className="text-center space-y-4 max-w-2xl">
+        <div className="text-center space-y-4 max-w-2xl relative z-10">
           <h2 className="orbitron text-3xl md:text-4xl font-semibold text-white">
             Thank you for registering
           </h2>
