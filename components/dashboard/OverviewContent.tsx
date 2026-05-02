@@ -15,6 +15,7 @@ import { getMyTeams, getInviteLink, Team } from "@/lib/api/teams";
 import ShareModal from "@/components/dashboard/ShareModal";
 import { useAuthStore } from "@/lib/store/auth/authStore";
 import ProfileWarning from "@/components/dashboard/ProfileWarning";
+import { Tournament, getAllTournaments } from "@/lib/api/tournaments";
 
 const OverviewContent = () => {
   const user = useAuthStore((s) => s.user);
@@ -29,11 +30,10 @@ const OverviewContent = () => {
   // Tournaments placeholder (static until tournament API exists)
   const joinedTournaments: { id: number; image: string; title: string }[] = [];
 
-  const hostedCompetitions = [
-    { id: 1, name: "Ikorodu Gamers Hangout" },
-    { id: 2, name: "John Cent's Gaming Competition" },
-    { id: 3, name: "Enugu Esport Cup" },
-  ];
+  const [hostedCompetitions, setHostedCompetitions] = useState<Tournament[]>(
+    [],
+  );
+  const [hostedLoading, setHostedLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -48,6 +48,29 @@ const OverviewContent = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    const loadHosted = async () => {
+      setHostedLoading(true);
+
+      try {
+        const res = await getAllTournaments();
+
+        const allTournaments: Tournament[] = res?.data || [];
+
+        const hosted = allTournaments.filter((t) => t.creatorId === user?._id);
+
+        setHostedCompetitions(hosted);
+      } catch (err) {
+        console.error("Failed to load hosted tournaments:", err);
+        setHostedCompetitions([]);
+      } finally {
+        setHostedLoading(false);
+      }
+    };
+
+    if (user?._id) loadHosted();
+  }, [user?._id]);
 
   const handleShare = async (teamId: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -249,27 +272,45 @@ const OverviewContent = () => {
           </div>
 
           {/* Hosted Competitions */}
-          {/* <div className="bg-[#0d0f20] border border-[#455872] rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-white">
-                Hosted Competitions
-              </h2>
-              <button className="text-cyan-400 hover:text-cyan-300 text-xs font-semibold transition-colors">
-                See all
-              </button>
+          {!hostedLoading && hostedCompetitions.length > 0 && (
+            <div className="bg-[#0d0f20] border border-[#455872] rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-white">
+                  Hosted Competitions
+                </h2>
+              </div>
+
+              <div className="space-y-1">
+                {hostedCompetitions.map((comp) => (
+                  <Link
+                    key={comp._id}
+                    href={`/dashboard/tournaments/${comp.slug}`}
+                    className="flex items-center gap-3 py-3 border-b border-[#3a3a3a] last:border-0 hover:bg-white/5 rounded-lg px-2 transition-all"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-linear-to-br from-purple-500/20 to-cyan-500/20 border border-white/10" />
+
+                    <div className="flex flex-col">
+                      <p className="text-white text-sm font-medium">
+                        {comp.title}
+                      </p>
+
+                      <p className="text-gray-500 text-xs">
+                        {comp.status?.replace(/_/g, " ")}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
-            <div className="space-y-1">
-              {hostedCompetitions.map((comp) => (
-                <div
-                  key={comp.id}
-                  className="flex items-center gap-3 py-3 border-b border-[#3a3a3a] last:border-0 hover:bg-white/5 rounded-lg px-2 transition-all cursor-pointer"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-linear-to-br from-purple-500/20 to-cyan-500/20 shrink-0 border border-white/10" />
-                  <p className="text-white text-sm font-medium">{comp.name}</p>
-                </div>
-              ))}
+          )}
+
+          {/* {!hostedLoading && hostedCompetitions.length === 0 && (
+            <div className="bg-[#0d0f20] border border-[#455872] rounded-2xl p-6 text-center">
+              <p className="text-gray-400 text-sm">
+                You have not hosted any tournaments yet
+              </p>
             </div>
-          </div> */}
+          )} */}
         </div>
       </div>
 

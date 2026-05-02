@@ -27,13 +27,13 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
           {/* Content */}
           <div className="relative z-10">
             <h1 className="text-cyan-400 text-4xl font-bold orbitron tracking-wide">
-              Gloro
+              GloroQ
             </h1>
           </div>
 
           <div className="relative z-10 text-center mx-auto px-6 pb-6 pt-12 h-full">
             <h2 className="text-white text-xl font-bold orbitron mb-80 leading-snug">
-              Welcome to Gloro Gaming platform
+              Welcome to GloroQ Gaming platform
             </h2>
             <p className="text-white/80 text-lg max-w-sm leading-relaxed">
               This is where you can sign in and sign up, to get more information

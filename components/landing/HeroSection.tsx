@@ -1,6 +1,9 @@
 "use client";
+
 import React, { useRef, useState, useEffect } from "react";
-import { ChevronDown, Gamepad2, Volume2, VolumeX } from "lucide-react";
+import { ChevronDown, Volume2, VolumeX, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 const FALLBACK_IMAGE =
   "https://i.pinimg.com/originals/df/e8/90/dfe89081d0e439a8ac8106e68b74b1ec.jpg";
@@ -8,65 +11,67 @@ const FALLBACK_IMAGE =
 const HeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+
   const [muted, setMuted] = useState(true);
   const [currentVideo, setCurrentVideo] = useState(0);
   const [fading, setFading] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
-  // Put your downloaded .mp4 files in /public/videos/
   const videos = [
     "/videos/clip1.mp4",
     "/videos/clip2.mp4",
     "/videos/clip3.mp4",
     "/videos/clip4.mp4",
-    "/videos/clip5.mp4"
+    "/videos/clip5.mp4",
   ];
 
   const handleVideoEnd = () => {
     setFading(true);
+
     setTimeout(() => {
       setCurrentVideo((prev) => (prev + 1) % videos.length);
       setFading(false);
       setVideoLoaded(false);
-    }, 800);
+    }, 700);
   };
 
-  // Sync mute state to both video and audio
   const toggleMute = () => {
     const next = !muted;
     setMuted(next);
+
     if (videoRef.current) videoRef.current.muted = next;
+
     if (audioRef.current) {
       audioRef.current.muted = next;
-      // Audio needs user gesture to play — attempt on first unmute
+
       if (!next) {
         audioRef.current.play().catch(() => {});
       }
     }
   };
 
-  // On mount, try to play audio (will stay muted until user unmutes)
   useEffect(() => {
     const audio = audioRef.current;
+
     if (!audio) return;
-    audio.muted = true; // always start muted (browser policy)
+
+    audio.muted = true;
     audio.volume = 0.4;
-    audio.play().catch(() => {}); // silent fail if blocked
+    audio.play().catch(() => {});
   }, []);
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 text-center overflow-hidden">
-      {/* Fallback image — shows until video loads */}
+    <main className="relative min-h-screen flex items-center justify-center text-center px-4 pt-20 overflow-hidden">
+      {/* fallback */}
       {!videoLoaded && (
         <img
           src={FALLBACK_IMAGE}
           alt="Gaming background"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ zIndex: 0 }}
         />
       )}
 
-      {/* Video Background */}
+      {/* video */}
       <video
         ref={videoRef}
         key={currentVideo}
@@ -78,80 +83,87 @@ const HeroSection = () => {
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
           videoLoaded && !fading ? "opacity-100" : "opacity-0"
         }`}
-        style={{ zIndex: 1 }}
       >
         <source src={videos[currentVideo]} type="video/mp4" />
       </video>
 
-      {/* Separate audio track — /public/sounds/epic-intro.mp3 */}
+      {/* audio */}
       <audio ref={audioRef} src="/sounds/epic-intro.mp3" loop preload="auto" />
 
-      {/* Dark overlay */}
+      {/* overlays */}
       <div className="absolute inset-0 bg-[#020818]/70 z-[2]" />
-      {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#020818] to-transparent z-[3]" />
 
-      {/* Mute toggle */}
+      {/* mute */}
       <button
         onClick={toggleMute}
-        className="absolute bottom-8 right-6 z-10 flex items-center gap-1.5 text-white/60 hover:text-white transition-colors text-xs border border-white/20 hover:border-white/40 rounded-full px-3 py-1.5 bg-black/30 backdrop-blur-sm"
+        className="absolute bottom-8 right-6 z-20 flex items-center gap-1 text-white/70 hover:text-white border border-white/20 hover:border-white/40 rounded-full p-2 bg-black/30 backdrop-blur-md transition text-xs cursor-pointer"
       >
-        {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+        {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
         {muted ? "Unmute" : "Mute"}
       </button>
 
-      {/* Video indicator dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
-        {videos.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => {
-              setFading(true);
-              setTimeout(() => {
-                setCurrentVideo(i);
-                setFading(false);
-                setVideoLoaded(false);
-              }, 400);
-            }}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === currentVideo ? "bg-cyan-400 w-4" : "bg-white/30 w-1.5"
-            }`}
-          />
-        ))}
-      </div>
+      {/* content */}
+      <div className="relative z-10 max-w-5xl">
+        {/* headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            duration: 1,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="font-black text-2xl md:text-5xl leading-tight orbitron"
+        >
+          <span className="block text-white">THE ULTIMATE</span>
 
-      {/* Main content */}
-      <div className="relative z-[4]">
-        <h1 className="font-bold text-3xl md:text-5xl leading-tight tracking-wide md:mt-36 mt-10 orbitron">
-          THE ULTIMATE <br />
-          <span className="bg-linear-to-r from-[#7C3AED] via-[#2F82EE] to-[#00AEEF] bg-clip-text text-transparent font-extrabold text-4xl md:text-6xl mr-2">
-            GAMING{" "}
+          <span className="block mt-2 bg-linear-to-r from-purple-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-pulse">
+            GAMING PLATFORM
           </span>
-          <span className="font-extrabold text-4xl md:text-6xl text-white">
-            PLATFORM
-          </span>
-        </h1>
+        </motion.h1>
 
-        <p className="mt-3 max-w-xl mx-auto text-sm md:text-base font-normal text-[#FFFFFFC7] leading-6 tracking-wide">
-          All your gaming essentials in one place. Tournaments, news, streams
-          and community—designed for players and creators.
-        </p>
+        {/* subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.8 }}
+          className="mt-6 max-w-2xl mx-auto text-white/80 text-sm md:text-lg leading-7"
+        >
+          Join tournaments, build your squad, win rewards, grow your audience
+          and dominate the competition.
+        </motion.p>
 
-        <div className="my-7 flex justify-center">
-          <ChevronDown
-            className="text-cyan-400 animate-bounce"
-            size={36}
-            strokeWidth={2}
-          />
-        </div>
+        {/* scroll cue */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="mt-12 flex justify-center"
+        >
+          <ChevronDown className="text-cyan-400 animate-bounce" size={34} />
+        </motion.div>
 
-        <button className="group relative font-semibold text-sm text-white bg-linear-to-b from-cyan-500 to-cyan-100 rounded-lg shadow-lg hover:shadow-cyan-400/50 transition-all duration-300 hover:scale-105 overflow-hidden p-px cursor-pointer">
-          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 z-20" />
-          <span className="relative z-10 flex items-center gap-2 bg-[#232230] backdrop-blur-sm py-3 px-7 rounded-lg">
-            {/* <Gamepad2 size={18} color="#9EF5B4" /> */}
-            See all Tournaments
-          </span>
-        </button>
+        
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className="mt-10 flex justify-center"
+        >
+          <Link href="/tournaments/hub" className="relative group">
+            {/* pulse ring */}
+            <span className="absolute inset-0 rounded-xl bg-cyan-400/30 blur-xl animate-pulse" />
+
+            <span className="relative flex items-center gap-3 px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-2xl hover:scale-105 transition-all duration-300">
+              Explore Tournaments
+              <ArrowRight
+                size={18}
+                className="group-hover:translate-x-1 transition"
+              />
+            </span>
+          </Link>
+        </motion.div>
       </div>
     </main>
   );

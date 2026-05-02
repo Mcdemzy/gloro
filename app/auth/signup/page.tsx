@@ -142,7 +142,7 @@ const SignupPage = () => {
 
             {/* Terms */}
             <p className="text-white/50 text-xs text-center">
-              By signing up, you agreed to Gloro Gaming Platform{" "}
+              By signing up, you agreed to GloroQ Gaming Platform{" "}
               <a
                 href="#"
                 className="text-cyan-400 hover:text-cyan-300 transition-colors"
