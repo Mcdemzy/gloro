@@ -1,7 +1,9 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Inter, Orbitron } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
+import { AuthProvider } from '@/lib/components/auth/AuthProvider';
 
 // Initialize Inter font (default)
 const inter = Inter({
@@ -34,7 +36,10 @@ export default function RootLayout({
       className={`${inter.variable} ${orbitron.variable}`}
     >
       <body className="font-sans antialiased" suppressHydrationWarning>
+        <AuthProvider>
         {children}
+        <Toaster position="top-right" richColors />
+          </AuthProvider>
       </body>
     </html>
   );

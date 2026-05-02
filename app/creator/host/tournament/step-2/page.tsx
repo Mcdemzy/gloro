@@ -1,307 +1,406 @@
 "use client";
+
+/**
+ * Step 2 — Dates & Schedule
+ *
+ * Fixes vs original:
+ * - State persisted in WizardContext (survives back navigation)
+ * - Validation is inline, not alert()
+ * - Schedules are real WizardSchedule objects with `order` field for the API
+ * - Registration close time merged into registrationCloseDate ISO string
+ * - `order` auto-increments as schedules are added
+ */
+
 import { useState } from "react";
-import { Plus, Calendar, X } from "lucide-react";
+import { Plus, X, Calendar } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TournamentFormLayout from "@/components/creator/host/TournamentFormLayout";
+import { useWizard, WizardSchedule } from "@/context/TournamentWizardContext";
 
-interface Schedule {
-  startDate: string;
-  endDate: string;
-  stage: string;
+// ── Schedule modal ────────────────────────────────────────────────────────────
+
+interface ScheduleModalProps {
+  nextOrder: number;
+  onSave: (s: WizardSchedule) => void;
+  onClose: () => void;
 }
 
-export default function HostTournamentStep2() {
-  const router = useRouter();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [registrationOpenDate, setRegistrationOpenDate] = useState("");
-  const [registrationCloseDate, setRegistrationCloseDate] = useState("");
-  const [registrationCloseTime, setRegistrationCloseTime] = useState("12:00");
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [showScheduleModal, setShowScheduleModal] = useState(false);
-  const [scheduleForm, setScheduleForm] = useState<Schedule>({
+function ScheduleModal({ nextOrder, onSave, onClose }: ScheduleModalProps) {
+  const [form, setForm] = useState<WizardSchedule>({
+    title: "",
+    description: "",
     startDate: "",
     endDate: "",
-    stage: "",
+    order: nextOrder,
   });
+  const [error, setError] = useState("");
 
-  const handleAddSchedule = () => {
-    setShowScheduleModal(true);
-  };
-
-  const handleSaveSchedule = () => {
-    if (scheduleForm.startDate && scheduleForm.endDate && scheduleForm.stage) {
-      setSchedules([...schedules, { ...scheduleForm }]);
-      setScheduleForm({ startDate: "", endDate: "", stage: "" });
-      setShowScheduleModal(false);
-    }
-  };
-
-  const handleRemoveSchedule = (index: number) => {
-    setSchedules(schedules.filter((_, i) => i !== index));
-  };
-
-  const formatDateRange = (start: string, end: string) => {
-    if (!start || !end) return "";
-    const startObj = new Date(start);
-    const endObj = new Date(end);
-    const startMonth = startObj.toLocaleDateString("en-US", { month: "short" });
-    const endMonth = endObj.toLocaleDateString("en-US", { month: "short" });
-    const startDay = startObj.getDate();
-    const endDay = endObj.getDate();
-
-    return `${startMonth} ${startDay} • ${endMonth} ${endDay}`;
-  };
-
-  const handleSaveDraft = () => {
-    console.log("Saving step 2 draft:", {
-      startDate,
-      endDate,
-      registrationOpenDate,
-      registrationCloseDate,
-      registrationCloseTime,
-      schedules,
-    });
-    alert("Tournament dates saved as draft!");
-  };
-
-  const handleProceed = () => {
-    if (!startDate || !endDate) {
-      alert("Please enter start and end dates");
+  const handleSave = () => {
+    if (!form.title.trim()) {
+      setError("Stage name is required");
       return;
     }
-
-    if (!registrationOpenDate || !registrationCloseDate) {
-      alert("Please enter registration dates");
+    if (!form.startDate) {
+      setError("Start date is required");
       return;
     }
-
-    // Navigate to step 3
-    router.push("/creator/host/tournament/step-3");
-  };
-
-  const handleBack = () => {
-    router.push("/creator/host/tournament");
+    if (!form.endDate) {
+      setError("End date is required");
+      return;
+    }
+    if (form.endDate < form.startDate) {
+      setError("End date must be after start date");
+      return;
+    }
+    onSave(form);
   };
 
   return (
-    <TournamentFormLayout
-      currentStep={2}
-      onSaveDraft={handleSaveDraft}
-      onProceed={handleProceed}
-    >
-      {/* Start and End Date */}
-      <div>
-        <label className="text-white font-semibold mb-3 block">
-          Start and End Date <span className="text-red-400">*</span>
-        </label>
-        <div className="flex items-center gap-4">
-          <div className="flex-1 relative">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="relative bg-linear-to-br from-[#0c3540] to-[#0a2d36] border border-cyan-400/30 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+        <h3 className="text-xl font-bold text-white mb-6 orbitron">
+          Add Schedule Stage
+        </h3>
+
+        <div className="space-y-5">
+          <div>
+            <label className="text-gray-400 text-sm font-medium mb-1.5 block">
+              Stage name
+            </label>
             <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 transition-colors"
-            />
-            <Calendar
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none"
-              size={20}
+              type="text"
+              autoFocus
+              value={form.title}
+              onChange={(e) => {
+                setForm((f) => ({ ...f, title: e.target.value }));
+                setError("");
+              }}
+              placeholder="e.g. Qualifiers, Semi Final, Grand Final"
+              className="w-full px-4 py-2.5 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-cyan-400 transition-colors text-sm"
             />
           </div>
-          <span className="text-gray-400 text-xl">~</span>
-          <div className="flex-1 relative">
+
+          <div>
+            <label className="text-gray-400 text-sm font-medium mb-1.5 block">
+              Description (optional)
+            </label>
             <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 transition-colors"
-            />
-            <Calendar
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none"
-              size={20}
+              type="text"
+              value={form.description}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, description: e.target.value }))
+              }
+              placeholder="Best of 3, etc."
+              className="w-full px-4 py-2.5 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-cyan-400 transition-colors text-sm"
             />
           </div>
-        </div>
-      </div>
 
-      {/* Registration Open Date */}
-      <div>
-        <label className="text-white font-semibold mb-3 block">
-          Registration Open Date <span className="text-red-400">*</span>
-        </label>
-        <div className="relative">
-          <input
-            type="date"
-            value={registrationOpenDate}
-            onChange={(e) => setRegistrationOpenDate(e.target.value)}
-            className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 transition-colors"
-          />
-          <Calendar
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none"
-            size={20}
-          />
-        </div>
-      </div>
-
-      {/* Registration Close Date */}
-      <div>
-        <label className="text-white font-semibold mb-3 block">
-          Registration Close Date <span className="text-red-400">*</span>
-        </label>
-        <div className="flex items-center gap-4">
-          <div className="flex-1 relative">
-            <input
-              type="date"
-              value={registrationCloseDate}
-              onChange={(e) => setRegistrationCloseDate(e.target.value)}
-              className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 transition-colors"
-            />
-            <Calendar
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 pointer-events-none"
-              size={20}
-            />
-          </div>
-          <span className="text-gray-400">&</span>
-          <div className="flex-1">
-            <input
-              type="time"
-              value={registrationCloseTime}
-              onChange={(e) => setRegistrationCloseTime(e.target.value)}
-              className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Scheduling */}
-      <div>
-        <label className="text-white font-semibold mb-3 block">
-          Scheduling
-        </label>
-
-        {/* Add Schedule Button */}
-        <button
-          type="button"
-          onClick={handleAddSchedule}
-          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-4 px-4 py-2 bg-cyan-500/10 rounded-lg hover:bg-cyan-500/20"
-        >
-          <Plus size={18} />
-          Click on the + icon to add Schedule (s)
-        </button>
-
-        {/* Schedule List */}
-        <div className="space-y-3">
-          {schedules.map((schedule, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-4 bg-[#0a2d36] border border-cyan-500/20 rounded-lg group hover:border-cyan-400/50 transition-all"
-            >
-              <div>
-                <p className="text-white font-medium">
-                  {formatDateRange(schedule.startDate, schedule.endDate)}
-                </p>
-                <p className="text-gray-400 text-sm">{schedule.stage}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleRemoveSchedule(index)}
-                className="text-red-400 hover:text-red-300 transition-colors opacity-0 group-hover:opacity-100"
-              >
-                <X size={20} />
-              </button>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-gray-400 text-sm font-medium mb-1.5 block">
+                Start date
+              </label>
+              <input
+                type="date"
+                value={form.startDate}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, startDate: e.target.value }));
+                  setError("");
+                }}
+                className="w-full px-3 py-2.5 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors text-sm"
+              />
             </div>
-          ))}
+            <div>
+              <label className="text-gray-400 text-sm font-medium mb-1.5 block">
+                End date
+              </label>
+              <input
+                type="date"
+                value={form.endDate}
+                min={form.startDate}
+                onChange={(e) => {
+                  setForm((f) => ({ ...f, endDate: e.target.value }));
+                  setError("");
+                }}
+                className="w-full px-3 py-2.5 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors text-sm"
+              />
+            </div>
+          </div>
 
-          {schedules.length === 0 && (
-            <p className="text-gray-400 text-center py-4">
-              No schedules added yet. Add tournament stages like Qualifiers,
-              Semi Finals, etc.
-            </p>
-          )}
+          {error && <p className="text-red-400 text-sm">{error}</p>}
+
+          <div className="flex gap-3 pt-1">
+            <button
+              onClick={onClose}
+              className="flex-1 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-gray-300 rounded-xl font-semibold transition-all"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="flex-1 px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all shadow-lg"
+            >
+              Add stage
+            </button>
+          </div>
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Schedule Modal */}
-      {showScheduleModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            onClick={() => setShowScheduleModal(false)}
-          ></div>
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-          <div className="relative bg-gradient-to-br from-[#0c3540] to-[#0a2d36] border border-cyan-400/30 rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <h3 className="text-2xl font-bold text-white mb-6">Add Schedule</h3>
+function formatDateRange(start: string, end: string) {
+  if (!start || !end) return "";
+  const fmt = (d: string) =>
+    new Date(d + "T00:00:00").toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  return `${fmt(start)} → ${fmt(end)}`;
+}
 
-            <div className="space-y-6">
-              {/* Date Range */}
-              <div>
-                <label className="text-white font-medium mb-2 block">
-                  Date Range
-                </label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="date"
-                    value={scheduleForm.startDate}
-                    onChange={(e) =>
-                      setScheduleForm({
-                        ...scheduleForm,
-                        startDate: e.target.value,
-                      })
-                    }
-                    className="flex-1 px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                  />
-                  <span className="text-gray-400">-</span>
-                  <input
-                    type="date"
-                    value={scheduleForm.endDate}
-                    onChange={(e) =>
-                      setScheduleForm({
-                        ...scheduleForm,
-                        endDate: e.target.value,
-                      })
-                    }
-                    className="flex-1 px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
-              </div>
+function DateInput({
+  label,
+  value,
+  onChange,
+  required,
+  min,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  min?: string;
+}) {
+  return (
+    <div>
+      <label className="text-white font-semibold mb-2 block text-sm">
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
+      <div className="relative">
+        <input
+          type="date"
+          value={value}
+          min={min}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors appearance-none"
+        />
+        <Calendar
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400/60 pointer-events-none"
+          size={16}
+        />
+      </div>
+    </div>
+  );
+}
 
-              {/* Stage */}
-              <div>
-                <label className="text-white font-medium mb-2 block">
-                  Stage Name
-                </label>
+// ── Main page ─────────────────────────────────────────────────────────────────
+
+export default function HostTournamentStep2() {
+  const router = useRouter();
+  const {
+    state,
+    setStartDate,
+    setEndDate,
+    setRegistrationOpenDate,
+    setRegistrationCloseDate,
+    addSchedule,
+    removeSchedule,
+  } = useWizard();
+
+  const [showModal, setShowModal] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  // Local time state (merged into close date on change)
+  const [closeTime, setCloseTime] = useState("23:59");
+
+  const handleCloseDateTime = (date: string, time: string) => {
+    if (date) {
+      // Store as "YYYY-MM-DDTHH:mm" — converted to ISO on submit
+      setRegistrationCloseDate(`${date}T${time}`);
+    }
+  };
+
+  // Parse stored close date back to date/time parts for display
+  const closeDatePart = state.registrationCloseDate
+    ? (state.registrationCloseDate.split("T")[0] ?? "")
+    : "";
+
+  const handleProceed = () => {
+    const e: Record<string, string> = {};
+    if (!state.startDate) e.startDate = "Start date required";
+    if (!state.endDate) e.endDate = "End date required";
+    if (state.endDate && state.startDate && state.endDate < state.startDate)
+      e.endDate = "End date must be after start date";
+    if (!state.registrationOpenDate)
+      e.regOpen = "Registration open date required";
+    if (!closeDatePart) e.regClose = "Registration close date required";
+    setErrors(e);
+    if (Object.keys(e).length > 0) return;
+    router.push("/creator/host/tournament/step-3");
+  };
+
+  return (
+    <>
+      <TournamentFormLayout currentStep={2} onProceed={handleProceed}>
+        {/* Tournament dates */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <DateInput
+              label="Tournament Start Date"
+              value={state.startDate}
+              onChange={(v) => {
+                setStartDate(v);
+                setErrors((e) => ({ ...e, startDate: "" }));
+              }}
+              required
+            />
+            {errors.startDate && (
+              <p className="text-red-400 text-xs mt-1">{errors.startDate}</p>
+            )}
+          </div>
+          <div>
+            <DateInput
+              label="Tournament End Date"
+              value={state.endDate}
+              onChange={(v) => {
+                setEndDate(v);
+                setErrors((e) => ({ ...e, endDate: "" }));
+              }}
+              required
+              min={state.startDate}
+            />
+            {errors.endDate && (
+              <p className="text-red-400 text-xs mt-1">{errors.endDate}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Registration dates */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <DateInput
+              label="Registration Opens"
+              value={state.registrationOpenDate}
+              onChange={(v) => {
+                setRegistrationOpenDate(v);
+                setErrors((e) => ({ ...e, regOpen: "" }));
+              }}
+              required
+            />
+            {errors.regOpen && (
+              <p className="text-red-400 text-xs mt-1">{errors.regOpen}</p>
+            )}
+          </div>
+          <div>
+            <label className="text-white font-semibold mb-2 block text-sm">
+              Registration Closes <span className="text-red-400">*</span>
+            </label>
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
                 <input
-                  type="text"
-                  value={scheduleForm.stage}
-                  onChange={(e) =>
-                    setScheduleForm({ ...scheduleForm, stage: e.target.value })
-                  }
-                  placeholder="e.g., Qualifiers, Semi Final, Grand Final"
-                  className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+                  type="date"
+                  value={closeDatePart}
+                  max={state.startDate || undefined}
+                  onChange={(e) => {
+                    handleCloseDateTime(e.target.value, closeTime);
+                    setErrors((er) => ({ ...er, regClose: "" }));
+                  }}
+                  className="w-full px-4 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors appearance-none"
+                />
+                <Calendar
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-400/60 pointer-events-none"
+                  size={16}
                 />
               </div>
-
-              {/* Buttons */}
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowScheduleModal(false)}
-                  className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSaveSchedule}
-                  className="flex-1 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg font-semibold transition-all shadow-lg"
-                >
-                  Add
-                </button>
-              </div>
+              <input
+                type="time"
+                value={closeTime}
+                onChange={(e) => {
+                  setCloseTime(e.target.value);
+                  handleCloseDateTime(closeDatePart, e.target.value);
+                }}
+                className="w-28 px-3 py-3 bg-[#0a2d36] border border-cyan-500/20 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition-colors text-sm"
+              />
             </div>
+            {errors.regClose && (
+              <p className="text-red-400 text-xs mt-1">{errors.regClose}</p>
+            )}
           </div>
         </div>
+
+        {/* Schedules */}
+        <div>
+          <label className="text-white font-semibold mb-2 block">
+            Tournament Stages
+          </label>
+          <p className="text-gray-500 text-sm mb-4">
+            Add stages like Qualifiers, Group Stage, Semi Finals, Grand Final.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-4 px-4 py-2.5 bg-cyan-500/10 rounded-lg hover:bg-cyan-500/20 border border-cyan-500/20 text-sm font-medium"
+          >
+            <Plus size={16} />
+            Add stage
+          </button>
+
+          <div className="space-y-2.5">
+            {state.schedules.length === 0 ? (
+              <p className="text-gray-600 text-sm text-center py-6 border border-dashed border-gray-700 rounded-xl">
+                No stages added yet. Stages are optional but recommended.
+              </p>
+            ) : (
+              state.schedules.map((sc, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-4 bg-[#0a2d36] border border-cyan-500/15 rounded-xl group hover:border-cyan-400/30 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold flex items-center justify-center flex-shrink-0">
+                      {sc.order}
+                    </span>
+                    <div>
+                      <p className="text-white font-semibold text-sm">
+                        {sc.title}
+                      </p>
+                      <p className="text-gray-500 text-xs mt-0.5">
+                        {formatDateRange(sc.startDate, sc.endDate)}
+                        {sc.description ? ` · ${sc.description}` : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeSchedule(idx)}
+                    className="text-red-400/60 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </TournamentFormLayout>
+
+      {showModal && (
+        <ScheduleModal
+          nextOrder={state.schedules.length + 1}
+          onSave={(sc) => {
+            addSchedule(sc);
+            setShowModal(false);
+          }}
+          onClose={() => setShowModal(false)}
+        />
       )}
-    </TournamentFormLayout>
+    </>
   );
 }

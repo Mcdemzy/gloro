@@ -33,32 +33,22 @@ const Footer = () => {
   ];
 
   return (
-    <main className="w-full mt-20 px-4 md:px-16">
-      <div className="mx-auto px-4 md:px-8 py-12 md:py-20 border-t border-[#FFFFFF]">
-        {/* ── MOBILE LAYOUT (hidden on lg+) ── */}
-        <div className="flex flex-col items-center gap-8 lg:hidden mb-10">
-          {/* Logo */}
-          <h1 className="text-[#FFFFFF] text-5xl font-bold orbitron text-center">
-            GloroQ
-          </h1>
-
-          {/* Address */}
-          <div className="flex items-start gap-3 text-gray-300 text-center">
-            <MapPin size={22} className="text-[#FFFFFF] mt-0.5 shrink-0" />
-            <p className="text-sm leading-relaxed">
-              345 Faulconer Drive, Suite 4 •<br />
-              Charlottesville, CA, 12345
+    <main className="w-full mt-10 px-4 md:px-12">
+      <div className="mx-auto px-4 md:px-6 py-8 md:py-12 border-t border-[#ffffff30]">
+        {/* Mobile */}
+        <div className="flex flex-col items-center gap-5 lg:hidden mb-6">
+          <h1 className="text-white text-3xl font-bold orbitron">GloroQ</h1>
+          <div className="flex items-start gap-2 text-gray-400 text-center">
+            <MapPin size={15} className="text-white mt-0.5 shrink-0" />
+            <p className="text-xs leading-relaxed">
+              345 Faulconer Drive, Suite 4 • Charlottesville, CA, 12345
             </p>
           </div>
-
-          {/* Phone */}
-          <div className="flex items-center gap-3 text-gray-300">
-            <Phone size={22} className="text-[#FFFFFF]" />
-            <p className="text-sm">(123) 456-7890</p>
+          <div className="flex items-center gap-2 text-gray-400">
+            <Phone size={15} className="text-white" />
+            <p className="text-xs">(123) 456-7890</p>
           </div>
-
-          {/* Social icons — show first 4, rest overflow hidden */}
-          <div className="flex items-center gap-8 overflow-hidden">
+          <div className="flex items-center gap-5">
             {socialLinks.slice(0, 4).map((social, index) => {
               const Icon = social.icon;
               return (
@@ -66,51 +56,44 @@ const Footer = () => {
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="text-[#FFFFFF] hover:text-cyan-400 transition-all duration-300"
+                  className="text-white hover:text-cyan-400 transition-colors"
                 >
-                  <Icon size={26} />
+                  <Icon size={18} />
                 </a>
               );
             })}
           </div>
         </div>
 
-        {/* ── DESKTOP LAYOUT (hidden below lg) ── */}
-        <div className="hidden lg:grid grid-cols-2 gap-12 mb-24">
-          {/* Left - Logo */}
-          <div className="space-y-8">
-            <h1 className="text-[#FFFFFF] text-4xl md:text-8xl font-bold orbitron">
-              GloroQ
-            </h1>
+        {/* Desktop */}
+        <div className="hidden lg:grid grid-cols-2 gap-8 mb-12">
+          <div>
+            <h1 className="text-white text-5xl font-bold orbitron">GloroQ</h1>
           </div>
-
-          {/* Right - Contact + Social */}
-          <div className="space-y-14">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 text-gray-300">
-                <MapPin size={28} className="text-[#FFFFFF] mt-1 shrink-0" />
-                <p className="text-sm">
+          <div className="space-y-6">
+            <div className="space-y-2.5">
+              <div className="flex items-center gap-2 text-gray-400">
+                <MapPin size={16} className="text-white shrink-0" />
+                <p className="text-xs">
                   345 Faulconer Drive, Suite 4 • Charlottesville, CA, 12345
                 </p>
               </div>
-
-              <div className="flex items-center gap-32">
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Phone size={28} className="text-[#FFFFFF]" />
-                  <p className="text-sm">(123) 456-7890</p>
+              <div className="flex items-center gap-16">
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Phone size={16} className="text-white" />
+                  <p className="text-xs">(123) 456-7890</p>
                 </div>
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Printer size={28} className="text-[#FFFFFF]" />
-                  <p className="text-sm">(123) 456-7890</p>
+                <div className="flex items-center gap-2 text-gray-400">
+                  <Printer size={16} className="text-white" />
+                  <p className="text-xs">(123) 456-7890</p>
                 </div>
               </div>
             </div>
-
-            <div className="flex items-start">
-              <h3 className="text-[#FFFFFF] text-sm mr-10 font-normal">
+            <div className="flex items-start gap-6">
+              <span className="text-white text-xs whitespace-nowrap">
                 Social Media
-              </h3>
-              <div className="flex flex-wrap gap-9">
+              </span>
+              <div className="flex flex-wrap gap-5">
                 {socialLinks.map((social, index) => {
                   const Icon = social.icon;
                   return (
@@ -118,9 +101,9 @@ const Footer = () => {
                       key={index}
                       href={social.href}
                       aria-label={social.label}
-                      className="flex items-center justify-center text-[#FFFFFF] hover:text-cyan-400 transition-all duration-300"
+                      className="text-white hover:text-cyan-400 transition-colors"
                     >
-                      <Icon size={28} />
+                      <Icon size={18} />
                     </a>
                   );
                 })}
@@ -129,43 +112,40 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* ── BOTTOM BAR — shared, adapts per breakpoint ── */}
-        <div className="border-t border-[#FFFFFF] pt-5">
-          {/* Mobile bottom: 3 key links centered, others hidden */}
-          <div className="flex lg:hidden justify-center gap-10 flex-wrap">
+        {/* Bottom bar */}
+        <div className="border-t border-[#ffffff20] pt-4">
+          <div className="flex lg:hidden justify-center gap-6 flex-wrap">
             {footerLinks
               .filter((l) =>
                 ["CONTACT US", "PRIVACY POLICY", "DISCLAIMER"].includes(
                   l.title,
                 ),
               )
-              .map((link, index) => (
+              .map((link, i) => (
                 <a
-                  key={index}
+                  key={i}
                   href={link.href}
-                  className="text-[#FFFFFF] hover:text-cyan-400 text-xs font-normal transition-colors duration-300 uppercase tracking-wide"
+                  className="text-white/50 hover:text-cyan-400 text-[10px] transition-colors uppercase tracking-wide"
                 >
                   {link.title}
                 </a>
               ))}
           </div>
-
-          {/* Desktop bottom: all links + copyright */}
-          <div className="hidden lg:flex flex-row justify-between items-center gap-6">
-            <div className="flex flex-wrap gap-16">
-              {footerLinks.map((link, index) => (
+          <div className="hidden lg:flex flex-row justify-between items-center gap-4">
+            <div className="flex flex-wrap gap-8">
+              {footerLinks.map((link, i) => (
                 <a
-                  key={index}
+                  key={i}
                   href={link.href}
-                  className="text-[#FFFFFF] hover:text-cyan-400 text-xs font-normal transition-colors duration-300 uppercase tracking-wide"
+                  className="text-white/50 hover:text-cyan-400 text-[10px] transition-colors uppercase tracking-wide"
                 >
                   {link.title}
                 </a>
               ))}
             </div>
-            <div className="text-[#FFFFFF] text-xs font-normal whitespace-nowrap">
+            <p className="text-white/40 text-[10px] whitespace-nowrap">
               Copyright © 2018 • Lift Media Inc.
-            </div>
+            </p>
           </div>
         </div>
       </div>

@@ -1,123 +1,167 @@
 "use client";
 import React from "react";
-import { AlertTriangle, ArrowLeft } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface TournamentFormLayoutProps {
   children: React.ReactNode;
-  currentStep: number;
+  currentStep: 1 | 2 | 3;
   onSaveDraft?: () => void;
-  onProceed?: () => void;
-  showProceedButton?: boolean;
+  onProceed: () => void;
+  proceedLabel?: string;
+  proceedDisabled?: boolean;
 }
+
+const STEPS = [
+  { number: 1, label: "Basic Info" },
+  { number: 2, label: "Dates & Schedule" },
+  { number: 3, label: "Settings & Rules" },
+];
+
+/** Step routes in order */
+const STEP_ROUTES: Record<number, string> = {
+  1: "/creator/host/tournament",
+  2: "/creator/host/tournament/step-2",
+  3: "/creator/host/tournament/step-3",
+};
 
 const TournamentFormLayout = ({
   children,
   currentStep,
   onSaveDraft,
   onProceed,
-  showProceedButton = true,
+  proceedLabel,
+  proceedDisabled = false,
 }: TournamentFormLayoutProps) => {
   const router = useRouter();
-
-  const steps = [
-    { number: 1, label: "Basic Info" },
-    { number: 2, label: "Dates & Schedule" },
-    { number: 3, label: "Rules & Details" },
-    { number: 4, label: "Complete" },
-  ];
 
   const handleBack = () => {
     if (currentStep === 1) {
       router.push("/creator");
     } else {
-      router.push(
-        `/creator/host/tournament${currentStep > 2 ? `/step-${currentStep - 1}` : ""}`,
-      );
+      router.push(STEP_ROUTES[currentStep - 1]);
     }
   };
 
+  const isLastStep = currentStep === 3;
+  const buttonLabel =
+    proceedLabel ?? (isLastStep ? "Submit Tournament" : "Proceed");
+
   return (
     <div className="space-y-6">
-      {/* Header with Back Button */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={handleBack}
-          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
-        >
-          <ArrowLeft size={20} />
-          <span className="font-semibold">Back</span>
-        </button>
+      {/* Back button */}
+      <button
+        onClick={handleBack}
+        className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors group"
+      >
+        <ArrowLeft
+          size={18}
+          className="group-hover:-translate-x-0.5 transition-transform"
+        />
+        <span className="font-semibold text-sm">Back</span>
+      </button>
+
+      <h1 className="text-3xl font-bold text-white orbitron">
+        Create New Tournament
+      </h1>
+
+      {/* Warning */}
+      <div className="bg-linear-to-r from-red-500/10 to-orange-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
+        <AlertTriangle
+          size={20}
+          className="text-red-400 mt-0.5 shrink-0"
+        />
+        <p className="text-red-400/90 text-sm leading-relaxed">
+          <span className="font-semibold">Note:</span> If any team member hasn't
+          configured a particular game in their profile, their team won't be
+          allowed to register for that game.
+        </p>
       </div>
 
-      <h1 className="text-3xl font-bold text-white">Create New Tournament</h1>
+      {/* Step progress */}
+      <div className="flex items-center gap-0">
+        {STEPS.map((step, idx) => {
+          const isComplete = step.number < currentStep;
+          const isActive = step.number === currentStep;
+          const isUpcoming = step.number > currentStep;
 
-      {/* Warning Alert */}
-      <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-4 flex items-start gap-3">
-        <AlertTriangle size={24} className="text-red-400 mt-1 flex-shrink-0" />
-        <div className="flex-1">
-          <h3 className="text-red-400 font-semibold mb-1">
-            NOTE: If one of the team members is yet to set config for a
-            particular game they are applying to, the team wont be allowed to
-            register for the game.
-          </h3>
-        </div>
-      </div>
-
-      {/* Progress Steps */}
-      <div className="flex items-center gap-4 mb-8">
-        {steps.map((step) => (
-          <React.Fragment key={step.number}>
-            <div className="flex items-center gap-2">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
-                  step.number <= currentStep
-                    ? "bg-cyan-500 text-white"
-                    : "bg-gray-600 text-gray-400"
-                }`}
-              >
-                {step.number}
-              </div>
-              {step.number < 4 && (
+          return (
+            <React.Fragment key={step.number}>
+              {/* Step bubble + label */}
+              <div className="flex flex-col items-center gap-1.5">
                 <div
-                  className={`h-1 w-20 ${
-                    step.number < currentStep ? "bg-cyan-500" : "bg-gray-600"
-                  }`}
-                ></div>
-              )}
-            </div>
-            {step.number === 4 && (
-              <div className="w- h-8 rounded-full text-gray-400 flex items-center justify-center font-semibold text-sm">
-                Done
+                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm transition-all
+                    ${
+                      isComplete
+                        ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/30"
+                        : isActive
+                          ? "bg-cyan-500 text-white ring-4 ring-cyan-500/20 shadow-lg shadow-cyan-500/30"
+                          : "bg-[#0c3540] text-gray-500 border border-gray-600"
+                    }`}
+                >
+                  {isComplete ? "✓" : step.number}
+                </div>
+                <span
+                  className={`text-xs font-medium whitespace-nowrap
+                    ${isActive ? "text-cyan-400" : isComplete ? "text-cyan-600" : "text-gray-500"}`}
+                >
+                  {step.label}
+                </span>
               </div>
-            )}
-          </React.Fragment>
-        ))}
 
-        <button
-          onClick={onSaveDraft}
-          className="ml-auto px-6 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-400 rounded-lg font-semibold transition-all"
-        >
-          Save as Draft
-        </button>
+              {/* Connector line */}
+              {idx < STEPS.length - 1 && (
+                <div
+                  className="flex-1 h-px mx-3 mb-5 transition-all
+                  ${isComplete ? 'bg-cyan-500' : 'bg-gray-700'}"
+                >
+                  <div
+                    className={`h-full transition-all duration-500 ${isComplete ? "bg-cyan-500" : "bg-gray-700"}`}
+                  />
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
+
+        {/* Done bubble */}
+        <div className="flex flex-col items-center gap-1.5 ml-0">
+          <div
+            className={`px-3 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all
+            ${currentStep > 3 ? "bg-cyan-500 text-white" : "bg-[#0c3540] text-gray-500 border border-gray-600"}`}
+          >
+            Done
+          </div>
+          <span className="text-xs font-medium text-gray-500">Complete</span>
+        </div>
+
+        {/* Save Draft — pushed to the right */}
+        {onSaveDraft && (
+          <button
+            onClick={onSaveDraft}
+            className="ml-auto flex items-center gap-1.5 px-5 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 rounded-lg text-sm font-semibold transition-all"
+          >
+            <FileText size={14} />
+            Save Draft
+          </button>
+        )}
       </div>
 
-      {/* Form Content */}
-      <div className="bg-gradient-to-br from-[#0c3540]/60 to-[#0a2d36]/60 backdrop-blur-md border border-cyan-500/20 rounded-2xl p-8 space-y-8">
+      {/* Form card */}
+      <div className="bg-linear-to-br from-[#0c3540]/60 to-[#0a2d36]/60 backdrop-blur-md border border-cyan-500/20 rounded-2xl p-8 space-y-8">
         {children}
 
-        {/* Proceed Button */}
-        {showProceedButton && (
-          <div className="flex justify-end pt-4">
-            <button
-              onClick={onProceed}
-              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg font-semibold transition-all shadow-lg hover:shadow-cyan-500/50 flex items-center gap-2"
-            >
-              Proceed
-              <ArrowLeft size={20} className="rotate-180" />
-            </button>
-          </div>
-        )}
+        {/* Proceed / Submit */}
+        <div className="flex justify-end pt-2 border-t border-cyan-500/10">
+          <button
+            onClick={onProceed}
+            disabled={proceedDisabled}
+            className="flex items-center gap-2 px-8 py-3 bg-cyan-500 hover:bg-cyan-600 disabled:bg-cyan-500/40 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-cyan-500/40"
+          >
+            {buttonLabel}
+            <ArrowRight size={18} />
+          </button>
+        </div>
       </div>
     </div>
   );

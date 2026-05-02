@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Sidebar from "@/components/creator/Sidebar";
-import TopNav from "@/components/creator/TopNav";
-import Footer from "@/components/creator/Footer";
+// import TopNav from "@/components/creator/TopNav";
+// import Footer from "@/components/creator/Footer";
 import CreatorNavbar from "@/components/creator/CreatorNavbar";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
 
 interface CreatorLayoutProps {
   children: React.ReactNode;
@@ -15,7 +17,7 @@ const CreatorLayout = ({ children }: CreatorLayoutProps) => {
   return (
     <div className="min-h-screen bg-[#021E26] flex flex-col">
       {/* <TopNav /> */}
-      <CreatorNavbar/>
+      <Navbar />
       
       <div className="flex pt73px] flex-1">
         <Sidebar 

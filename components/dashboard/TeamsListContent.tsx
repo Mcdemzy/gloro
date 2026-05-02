@@ -1,243 +1,247 @@
 "use client";
-import React, { useState } from "react";
-import { Share2, Edit, Trash2, Users } from "lucide-react";
+import React, { useEffect, useState, useCallback } from "react";
+import { Share2, Users, Plus, Loader2, AlertCircle, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { getMyTeams, getInviteLink, dissolveTeam, Team } from "@/lib/api/teams";
+import { useAuthStore } from "@/lib/store/auth/authStore";
+import ProfileWarning from "@/components/dashboard/ProfileWarning";
+import ShareModal from "@/components/dashboard/ShareModal";
+import ConfirmModal from "./Confirmmodal";
 
-const TeamsListContent = () => {
+export default function TeamsListContent() {
+  const router = useRouter();
+  const user = useAuthStore((s) => s.user);
+
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [shareUrl, setShareUrl] = useState("");
   const [showShareModal, setShowShareModal] = useState(false);
-  const [shareUrl] = useState(
-    "https://www.figma.com/design/muJXMFOHkSbpo60dbc"
-  );
+  const [loadingInvite, setLoadingInvite] = useState<string | null>(null);
 
-  const copyShareUrl = () => {
-    navigator.clipboard.writeText(shareUrl);
-    alert("Link copied to clipboard!");
+  // Confirm dissolve
+  const [confirmDissolve, setConfirmDissolve] = useState<Team | null>(null);
+  const [dissolving, setDissolving] = useState(false);
+
+  const fetchTeams = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await getMyTeams();
+      if (res.success) setTeams(res.data || []);
+      else setError(res.message || "Failed to load teams.");
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchTeams(); }, [fetchTeams]);
+
+  const handleShare = async (teamId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLoadingInvite(teamId);
+    try {
+      const res = await getInviteLink(teamId);
+      const team = teams.find((t) => t._id === teamId);
+      setShareUrl(
+        res.success ? res.data.inviteLink : `${window.location.origin}/team/${team?.slug || teamId}`
+      );
+    } catch {
+      const team = teams.find((t) => t._id === teamId);
+      setShareUrl(`${window.location.origin}/team/${team?.slug || teamId}`);
+    } finally {
+      setLoadingInvite(null);
+      setShowShareModal(true);
+    }
   };
 
-  const teams = [
-    {
-      id: "top-gunner",
-      name: "Top Gunner Ash",
-      description:
-        "We strike from the shadows, leave no second chance precision, power, and fire in every shot",
-      currentTournaments: 2,
-      members: [
-        {
-          id: 1,
-          name: "John Abagnale",
-          role: "Team Lead",
-          avatar:
-            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-        },
-        {
-          id: 2,
-          name: "Amir Ahmad",
-          role: "Team Lead Assistant",
-          tags: ["Sniper"],
-          avatar:
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-        },
-        {
-          id: 3,
-          name: "Michael Klirk",
-          avatar:
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-        },
-        {
-          id: 4,
-          name: "Khalifa Suzaine",
-          avatar:
-            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-        },
-      ],
-      image:
-        "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=400&h=400&fit=crop",
-      memberCount: 12,
-    },
-    {
-      id: "night-owls",
-      name: "Night Owls",
-      description:
-        "We dominate the night with stealth and strategy, leaving opponents in the dark",
-      currentTournaments: 1,
-      members: [
-        {
-          id: 1,
-          name: "Sarah Johnson",
-          role: "Team Lead",
-          avatar:
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
-        },
-      ],
-      image:
-        "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=400&fit=crop",
-      memberCount: 6,
-    },
-    {
-      id: "dreamer-leagues",
-      name: "Dreamer Leagues",
-      description: "Aspiring champions with big dreams and even bigger skills",
-      currentTournaments: 3,
-      members: [
-        {
-          id: 1,
-          name: "Mike Davis",
-          role: "Captain",
-          avatar:
-            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop",
-        },
-      ],
-      image:
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=400&fit=crop",
-      memberCount: 9,
-    },
-  ];
+  const handleEdit = (e: React.MouseEvent, teamId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Navigate to detail page and open edit — we store intent in query
+    router.push(`/dashboard/teams/${teamId}?edit=1`);
+  };
+
+  const handleDissolveConfirm = async () => {
+    if (!confirmDissolve) return;
+    setDissolving(true);
+    try {
+      const res = await dissolveTeam(confirmDissolve._id);
+      if (res.success) {
+        setTeams((prev) => prev.filter((t) => t._id !== confirmDissolve._id));
+        setConfirmDissolve(null);
+      }
+    } finally {
+      setDissolving(false);
+    }
+  };
+
+  // Check if user is creator of a team
+  const isCreatorOf = (team: Team) => {
+    if (!user || !team.creatorId) return false;
+    const cid = typeof team.creatorId === "string" ? team.creatorId : team.creatorId._id;
+    return cid === user._id || cid === (user as unknown as Record<string, unknown>).id;
+  };
 
   return (
     <div className="space-y-6">
-      {/* Profile Warning */}
-      <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-4 flex items-start gap-3">
-        <div className="flex-1">
-          <h3 className="text-red-400 font-semibold mb-1">
-            ⚠️ Profile update required
-          </h3>
-          <p className="text-gray-300 text-sm">
-            Profile update completion is compulsory before being able to apply
-            for Tournaments.
-          </p>
-        </div>
-        <div className="flex-shrink-0">
-          <div className="text-right mb-2">
-            <span className="text-white font-semibold text-sm">Progress</span>
-          </div>
-          <div className="w-64 h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full w-2/3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-          </div>
-        </div>
-      </div>
+      <ProfileWarning progress={33} />
 
-      {/* Your Teams Header */}
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white orbitron">Your Teams</h2>
+        <h2 className="text-2xl font-bold text-white">Your Teams</h2>
         <Link
           href="/dashboard/teams/create"
-          className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
+          className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all text-sm"
         >
-          Create new team
+          <Plus size={16} /> Create new team
         </Link>
       </div>
 
-      {/* Teams Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {teams.map((team) => (
-          <Link
-            key={team.id}
-            href={`/dashboard/teams/${team.id}`}
-            className="bg-[#0a1628] border border-[#455872] rounded-2xl overflow-hidden hover:border-cyan-400/50 transition-all cursor-pointer group"
-          >
-            <div
-              className="relative h-48 bg-cover bg-center"
-              style={{ backgroundImage: `url(${team.image})` }}
-            >
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-transparent"></div>
-              <div className="absolute top-4 right-4 flex gap-2">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowShareModal(true);
-                  }}
-                  className="p-2 bg-white/10 backdrop-blur-sm hover:bg-cyan-500/20 rounded-lg transition-all"
-                >
-                  <Share2 size={18} className="text-white" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // Handle delete
-                  }}
-                  className="p-2 bg-red-500/80 hover:bg-red-600 rounded-lg transition-all"
-                >
-                  <Trash2 size={18} className="text-white" />
-                </button>
-              </div> */}
-            </div>
-
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-white mb-2">{team.name}</h3>
-              {/* <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-xs font-semibold flex items-center gap-1">
-                  <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
-                  Currently in {team.currentTournaments} Tournaments
-                </span>
-              </div>
-              <p className="text-gray-400 text-sm mb-6 line-clamp-2">
-                {team.description}
-              </p> */}
-
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2 text-gray-400">
-                  <Users size={16} />
-                  <span className="text-sm">{team.memberCount} members</span>
-                </div>
-                <div className="flex gap-2">
-                  {/* <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      // Handle edit
-                    }}
-                    className="px-4 py-2 bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                  >
-                    <Edit size={16} />
-                    Edit
-                  </button> */}
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowShareModal(true);
-                    }}
-                    className="px-4 py-2 text-white rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
-                  >
-                    <Share2 size={16} />
-                    {/* Share */}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      {/* Share Modal */}
-      {showShareModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-            onClick={() => setShowShareModal(false)}
-          ></div>
-          <div className="relative bg-[#0a1628] border border-cyan-400/30 rounded-2xl p-8 max-w-lg w-full">
-            <div className="mb-6">
-              <input
-                type="text"
-                value={shareUrl}
-                readOnly
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm"
-              />
-            </div>
-            <button
-              onClick={copyShareUrl}
-              className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
-            >
-              Copy this link →
-            </button>
-          </div>
+      {loading && (
+        <div className="flex items-center justify-center py-24">
+          <Loader2 size={32} className="text-cyan-400 animate-spin" />
         </div>
+      )}
+
+      {!loading && error && (
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <AlertCircle size={40} className="text-red-400" />
+          <p className="text-gray-400">{error}</p>
+          <button onClick={fetchTeams}
+            className="px-5 py-2 bg-cyan-500/20 text-cyan-400 rounded-xl text-sm hover:bg-cyan-500/30">
+            Retry
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && teams.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-20 gap-4 bg-[#0a1628] border border-[#455872] rounded-2xl">
+          <Users size={48} className="text-gray-600" />
+          <p className="text-gray-400 text-lg">You haven&apos;t joined any teams yet</p>
+          <Link href="/dashboard/teams/create"
+            className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-xl font-semibold transition-all">
+            Create your first team
+          </Link>
+        </div>
+      )}
+
+      {!loading && !error && teams.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {teams.map((team) => {
+            const creator = isCreatorOf(team);
+            return (
+              <Link
+                key={team._id}
+                href={`/dashboard/teams/${team._id}`}
+                className="bg-[#0a1628] border border-[#455872] rounded-2xl overflow-hidden hover:border-cyan-400/40 transition-all cursor-pointer group"
+              >
+                {/* Cover / Logo */}
+                <div className="relative h-44 bg-gradient-to-br from-[#1a2744] to-[#0d1628]">
+                  {team.coverImage ? (
+                    <div className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${team.coverImage})` }} />
+                  ) : team.logo ? (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <img src={team.logo} alt={team.name}
+                        className="w-24 h-24 rounded-full object-cover border-4 border-[#455872]" />
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500/30 to-purple-500/30 flex items-center justify-center border border-cyan-400/20">
+                        <span className="text-3xl font-bold text-white/60">
+                          {team.name.charAt(0)}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Status badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                      team.status === "active"
+                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                        : team.status === "expired"
+                        ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                        : "bg-red-500/20 text-red-400 border border-red-500/30"
+                    }`}>{team.status}</span>
+                  </div>
+
+                  {/* Creator action buttons top-right */}
+                  {creator && (
+                    <div className="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={(e) => handleEdit(e, team._id)}
+                        className="w-8 h-8 rounded-lg bg-black/60 backdrop-blur-sm hover:bg-cyan-500/80 flex items-center justify-center text-white transition-all"
+                        title="Edit team"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setConfirmDissolve(team); }}
+                        className="w-8 h-8 rounded-lg bg-black/60 backdrop-blur-sm hover:bg-red-500/80 flex items-center justify-center text-white transition-all"
+                        title="Dissolve team"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors truncate">
+                    {team.name}
+                  </h3>
+                  {team.description && (
+                    <p className="text-gray-400 text-xs mb-3 line-clamp-2">{team.description}</p>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+                      <Users size={14} />
+                      <span>
+                        {team.members.length}
+                        {team.maxMembers ? `/${team.maxMembers}` : ""}{" "}
+                        member{team.members.length !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <button
+                      onClick={(e) => handleShare(team._id, e)}
+                      disabled={loadingInvite === team._id}
+                      className="p-2 text-gray-400 hover:text-cyan-400 transition-colors"
+                      title="Share invite link"
+                    >
+                      {loadingInvite === team._id
+                        ? <Loader2 size={16} className="animate-spin" />
+                        : <Share2 size={16} />}
+                    </button>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Dissolve confirm */}
+      {confirmDissolve && (
+        <ConfirmModal
+          title="Dissolve Team"
+          message={`Permanently dissolve "${confirmDissolve.name}"? All members will be removed and this cannot be undone.`}
+          confirmLabel="Dissolve"
+          loading={dissolving}
+          onConfirm={handleDissolveConfirm}
+          onCancel={() => setConfirmDissolve(null)}
+        />
+      )}
+
+      {showShareModal && (
+        <ShareModal url={shareUrl} onClose={() => setShowShareModal(false)} />
       )}
     </div>
   );
-};
-
-export default TeamsListContent;
+}
